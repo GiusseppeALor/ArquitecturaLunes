@@ -124,6 +124,81 @@ main h2 {
   font-weight: bold;
 }
 
+/* --- Estilos de la Vista de Gestión --- */
+
+/* Contenedor del título y el botón "Agregar" */
+.gestion-header {
+  display: flex; /* Usa Flexbox para alinear los elementos */
+  justify-content: space-between; /* Empuja el título a la izquierda y el botón a la derecha */
+  align-items: center; /* Centra los elementos verticalmente */
+  margin-bottom: 20px; /* Añade un espacio debajo */
+}
+
+/* Estilo para el botón principal (reutilizable) */
+.btn-primario {
+  background-color: var(--color-primario); /* Fondo verde oscuro */
+  color: var(--color-blanco); /* Texto blanco */
+  padding: 10px 15px; /* Espacio interno para que no se vea apretado */
+  text-decoration: none; /* Quita el subrayado del enlace */
+  border-radius: 5px; /* Esquinas ligeramente redondeadas */
+  font-weight: bold;
+}
+
+/* Efecto al pasar el ratón sobre el botón */
+.btn-primario:hover {
+  opacity: 0.9; /* Lo hace un poco más transparente */
+}
+
+/*Gestion*/
+
+/* Estilo para la tarjeta que contiene la lista */
+.tarjeta-gestion {
+  background-color: var(--color-blanco);
+  border: 1px solid var(--color-borde);
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Estilo para la cabecera y las filas de la lista */
+.gestion-fila-header,
+.gestion-fila {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+}
+
+/* Línea separadora para las filas de datos */
+.gestion-fila {
+  border-top: 1px solid var(--color-borde);
+}
+
+/* Estilo para el encabezado de la lista */
+.gestion-fila-header {
+  font-weight: bold;
+  color: #6c757d;
+}
+
+/* El nombre del hospedaje ocupará todo el espacio disponible */
+.hospedaje-nombre {
+  flex-grow: 1; /* Hace que este elemento crezca y empuje a los demás */
+}
+
+/* Contenedor para los enlaces de "Editar" y "Eliminar" */
+.hospedaje-acciones a {
+  text-decoration: none;
+  font-weight: bold;
+  margin-left: 20px; /* Espacio entre los enlaces */
+}
+
+/* Colores específicos para las acciones */
+.accion-editar {
+  color: #0d6efd; /* Azul */
+}
+
+.accion-eliminar {
+  color: #dc3545; /* Rojo */
+}
+
 /* --- Estilos del Footer --- */
 
 .site-footer {
