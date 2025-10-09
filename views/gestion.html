@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Historial de Reservas - EcoHospedajes Rurales</title>
+    <title>Gestión de Hospedajes - EcoHospedajes Rurales</title>
     <link rel="stylesheet" href="../css/styles.css" />
   </head>
 
@@ -23,42 +23,37 @@
     </header>
 
     <main>
-      <h2>Historial de Reservas (Turista)</h2>
+      <div class="gestion-header">
+        <h2>Gestión de Hospedajes</h2>
+        <a href="#" class="btn-primario">Agregar hospedaje</a>
+      </div>
 
       <section>
-        <div class="tarjeta-reservas">
-          <div class="reserva-header">
-            <span>Reservas pasadas</span>
-            <span>Reservas activas</span>
-            <span>Estado</span>
+        <div class="tarjeta-gestion">
+          <div class="gestion-fila-header">
+            <span>Nombre del hospedaje</span>
+            <span>Acciones</span>
           </div>
 
-          <div class="reserva-fila">
-            <div class="reserva-nombre">
-              <strong>El Refugio</strong>
+          <div class="gestion-fila">
+            <span class="hospedaje-nombre">La Cueva</span>
+            <div class="hospedaje-acciones">
+              <a href="#" class="accion-editar">Editar</a>
+              <a href="#" class="accion-eliminar">Eliminar</a>
             </div>
-            <div class="reserva-fechas">10/02/2024 - 15/02/2024</div>
-            <div class="reserva-estado estado-cancelada">Cancelada</div>
           </div>
 
-          <div class="reserva-fila">
-            <div class="reserva-nombre">
-              <strong>La Cueva</strong>
+          <div class="gestion-fila">
+            <span class="hospedaje-nombre">El Refugio</span>
+            <div class="hospedaje-acciones">
+              <a href="#" class="accion-editar">Editar</a>
+              <a href="#" class="accion-eliminar">Eliminar</a>
             </div>
-            <div class="reserva-fechas">20/03/2024 - 22/03/2024</div>
-            <div class="reserva-estado estado-confirmada">Confirmada</div>
-          </div>
-
-          <div class="reserva-fila">
-            <div class="reserva-nombre">
-              <strong>El Jardín</strong>
-            </div>
-            <div class="reserva-fechas">20/03/2024 - 22/03/2024</div>
-            <div class="reserva-estado estado-confirmada">Confirmada</div>
           </div>
         </div>
       </section>
     </main>
+
     <footer class="site-footer">
       <div class="footer-content">
         <div class="footer-logo">
