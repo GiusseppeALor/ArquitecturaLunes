@@ -198,7 +198,138 @@ main h2 {
 .accion-eliminar {
   color: #dc3545; /* Rojo */
 }
+/* --- Estilos de la Vista de Dashboard --- */
 
+/* La cuadrícula que contendrá todas las tarjetas */
+.dashboard-grid {
+  display: grid; /* Usamos Grid Layout, es perfecto para esto */
+  grid-template-columns: repeat(2, 1fr); /* Crea 2 columnas de igual tamaño */
+  gap: 25px; /* Espacio entre las tarjetas */
+}
+
+/* Estilo para cada tarjeta individual del dashboard */
+.dashboard-card {
+  background-color: var(--color-blanco);
+  border: 1px solid var(--color-borde);
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  padding: 20px 20px 35px 20px;
+}
+
+.dashboard-card h3 {
+  margin-top: 0;
+  margin-bottom: 25px;
+}
+
+/* Contenedor genérico para los gráficos de simulación */
+.chart-placeholder {
+  height: 200px; /* Damos una altura fija a los gráficos */
+  display: flex;
+}
+
+/* --- Estilos para el Gráfico de Barras (Simulación) --- */
+.bar-chart {
+  display: flex;
+  justify-content: space-around; /* Distribuye las barras con espacio */
+  align-items: flex-end; /* Alinea las barras en la parte inferior */
+  border-bottom: 2px solid var(--color-borde); /* Eje X del gráfico */
+}
+
+.bar {
+  width: 15%;
+  background-color: var(--color-primario);
+  border-radius: 4px 4px 0 0; /* Redondea las esquinas superiores */
+  position: relative; /* Necesario para posicionar la etiqueta */
+  text-align: center;
+}
+
+.bar span {
+  position: absolute;
+  bottom: -25px; /* Coloca la etiqueta debajo de la barra */
+  width: 100%;
+  left: 0;
+  font-size: 0.9em;
+  color: #6c757d;
+}
+
+/* --- Estilos para el Medidor (Simulación) --- */
+.gauge-chart {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gauge-body {
+  width: 100%;
+  max-width: 200px; /* Límite de tamaño */
+  height: 100px; /* La mitad del ancho para un semicírculo perfecto */
+  position: relative;
+  border-radius: 100px 100px 0 0; /* Forma de semicírculo */
+  overflow: hidden; /* Oculta lo que se salga */
+  background: conic-gradient(
+    from -90deg,
+    #dc3545 0%,
+    #ffc107 25%,
+    #198754 50%,
+    var(--color-borde) 75%
+  );
+}
+
+.gauge-cover {
+  position: absolute;
+  width: 160px; /* Un poco más pequeño que el cuerpo */
+  height: 80px; /* La mitad de su ancho */
+  background: var(
+    --color-blanco
+  ); /* Cubre el centro para dar efecto de "aguja" */
+  border-radius: 80px 80px 0 0;
+  top: 20px;
+  left: 20px;
+
+  /* Para centrar el texto */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2em;
+  font-weight: bold;
+}
+
+/* --- Estilos para la Tarjeta de Métrica --- */
+.metric-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.metric-number {
+  font-size: 4em;
+  font-weight: bold;
+  color: var(--color-primario);
+}
+
+/* --- Media Query para Responsividad --- */
+/* Estas reglas se aplicarán solo en pantallas de 768px de ancho o menos (tablets y móviles) */
+@media (max-width: 768px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr; /* Cambia la cuadrícula a una sola columna */
+  }
+}
+/* --- Estilos para el Eje Y de los Gráficos --- */
+.y-axis {
+  width: 50px; /* Ancho fijo para la columna del eje */
+  height: 100%; /* Ocupa toda la altura del contenedor */
+  display: flex;
+  flex-direction: column; /* Apila los números verticalmente */
+  justify-content: space-between; /* Distribuye los números del tope al fondo */
+  text-align: right; /* Alinea el texto a la derecha */
+  padding-right: 10px; /* Espacio entre los números y las barras */
+  font-size: 0.8em;
+  color: #999; /* Un color gris suave */
+}
+
+.bar-chart {
+  flex-grow: 1; /* Hace que el gráfico de barras ocupe todo el espacio sobrante */
+}
 /* --- Estilos del Footer --- */
 
 .site-footer {
