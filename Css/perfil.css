@@ -1,0 +1,127 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f9f7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.profile-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.profile-card {
+    background-color: #fff;
+    width: 370px;
+    padding: 1.8rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.title {
+    font-size: 1.3rem;
+    color: #333;
+    margin-bottom: 1.2rem;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.8rem;
+}
+
+.section-header h3 {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #333;
+    margin: 0;
+}
+
+.edit-btn {
+    background-color: #f2f3f2;
+    color: #205c3b;
+    border: 1px solid #dcdcdc;
+    border-radius: 8px;
+    padding: 0.3rem 0.8rem;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.edit-btn:hover {
+    background-color: #e6f0ea;
+}
+
+.user-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-top: 0.6rem;
+}
+
+.info-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+}
+
+.info-item .label {
+    font-size: 0.85rem;
+    color: #555;
+    margin: 0;
+}
+
+.info-item .value {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #222;
+    margin: 0.1rem 0 0;
+}
+
+.profile-pic {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-left: 1rem;
+}
+
+.divider {
+    height: 1px;
+    background-color: #e0e0e0;
+    margin: 1.4rem 0;
+}
+
+.option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.7rem 0;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.option:last-child {
+    border-bottom: none;
+}
+
+.option:hover {
+    background-color: #f5f8f6;
+}
+
+.option span {
+    color: #205c3b;
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+.arrow {
+    font-size: 1.3rem;
+    color: #205c3b;
+}
