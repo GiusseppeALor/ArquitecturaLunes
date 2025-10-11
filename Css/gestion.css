@@ -31,80 +31,43 @@ body {
   padding: 0 20px; /* Espacio interno para que no se pegue a los bordes en móviles */
 }
 
-/* --- Estilos del Header --- */
-
-/* --- Estilos del Header --- */
-
-.site-header {
-  background-color: var(--color-blanco); /* Fondo blanco */
-  padding: 15px 0; /* Un poco menos de padding vertical */
-  border-bottom: 1px solid var(--color-borde); /* Línea inferior sutil */
-}
-
-.header-content {
+.navbar {
+  background-color: #ffffff;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 10px 40px;
 }
 
-/* Estilos para el logo */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .icono {
   width: 45px;
   height: 45px;
 }
 
-.logo {
-  display: flex; /* <-- La clave: activa Flexbox */
-  align-items: center; /* Centra la imagen y el texto verticalmente */
-  gap: 15px; /* Espacio entre la imagen y el texto */
-  text-decoration: none;
-}
-
-.logo-img {
-  height: 50px; /* Ajusta la altura de tu logo como necesites */
-  width: auto; /* Mantiene la proporción */
-}
-
-.logo-text h1 {
+.logo h1 {
   margin: 0;
-  color: var(--color-primario);
-  font-size: 1.5em; /* Ajusta el tamaño si es necesario */
+  font-size: 18px;
+  color: #2C5F4E;
 }
 
-.logo-text p {
+.logo p {
   margin: 0;
-  font-size: 0.9em;
-  color: var(--color-texto);
+  font-size: 12px;
+  color: #435E4F;
 }
 
-/* Estilos para la navegación principal */
-.main-nav {
-  display: flex;
-  align-items: center;
-  gap: 20px; /* Espacio entre cada elemento de la navegación */
-}
-
-.main-nav a {
+nav a {
   text-decoration: none;
-  color: var(--color-texto);
-  font-weight: bold;
-  padding: 8px 0; /* Padding para hacer el área de clic más grande */
+  color: #2C5F4E;
+  margin: 0 10px;
+  font-weight: 500;
 }
-
-.main-nav a:hover {
-  color: var(--color-primario);
-}
-
-/* Estilo específico para el botón/enlace de Iniciar Sesión */
-.nav-login {
-  padding: 8px 15px;
-  color: var(--color-primario);
-}
-
-.nav-login:hover {
-  color: var(--color-blanco);
-}
-
 /* --- Estilos del Main --- */
 
 main {

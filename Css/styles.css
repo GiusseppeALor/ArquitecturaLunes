@@ -44,15 +44,6 @@ nav a {
   font-weight: 500;
 }
 
-.cerrar {
-  background-color: #2C5F4E;
-  color: white;
-  border: none;
-  padding: 6px 14px;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
 .buscador {
   text-align: center;
   margin: 25px 0;
@@ -126,4 +117,13 @@ nav a {
   padding: 8px 16px;
   cursor: pointer;
   margin-top: 10px;
+}
+
+footer {
+  background-color: #ffffff;
+  text-align: center;
+  padding: 15px;
+  font-size: 14px;
+  color: #435E4F;
+  border-top: 1px solid #e0e0e0;
 }
