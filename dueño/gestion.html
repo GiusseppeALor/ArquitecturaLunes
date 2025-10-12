@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Gestión de Hospedajes - EcoHospedajes Rurales</title>
-    <link rel="stylesheet" href="/Css/gestion.css" />
-  </head>
 
-  <body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gestión de Hospedajes - EcoHospedajes Rurales</title>
+  <link rel="stylesheet" href="/Css/gestion.css" />
+</head>
+
+<body>
   <header class="navbar">
     <div class="logo">
       <img src="/img/logo.jpg" alt="Logo" class="icono">
@@ -24,69 +25,63 @@
     </nav>
   </header>
 
-    <main>
-      <div class="gestion-header">
-        <h2>Gestión de Hospedajes</h2>
-        <a href="#" class="btn-primario">Agregar hospedaje</a>
+  <main class="container">
+    <h2>Panel de Gestión</h2>
+    <p>Selecciona qué deseas administrar:</p>
+
+    <div class="cards">
+      <div class="card">
+        <h3>Gestión de Hospedajes</h3>
+        <p>Administra tus hospedajes: agregar, editar o eliminar.</p>
+        <a href="/dueño/gestionHospedajes.html" class="btn">Ir a gestión</a>
       </div>
 
-      <section>
-        <div class="tarjeta-gestion">
-          <div class="gestion-fila-header">
-            <span>Nombre del hospedaje</span>
-            <span>Acciones</span>
-          </div>
+      <div class="card">
+        <h3>Gestión de Usuarios</h3>
+        <p>Visualiza y administra los usuarios registrados.</p>
+        <a href="/dueño/gestionUsuarios.html" class="btn">Ir a gestión</a>
+      </div>
 
-          <div class="gestion-fila">
-            <span class="hospedaje-nombre">La Cueva</span>
-            <div class="hospedaje-acciones">
-              <a href="#" class="accion-editar">Editar</a>
-              <a href="#" class="accion-eliminar">Eliminar</a>
-            </div>
-          </div>
+      <div class="card">
+        <h3>Gestión de Reservas</h3>
+        <p>Revisa y confirma las reservas realizadas por turistas.</p>
+        <a href="/dueño/gestionReservas.html" class="btn">Ir a gestión</a>
+      </div>
+    </div>
+  </main>
 
-          <div class="gestion-fila">
-            <span class="hospedaje-nombre">El Refugio</span>
-            <div class="hospedaje-acciones">
-              <a href="#" class="accion-editar">Editar</a>
-              <a href="#" class="accion-eliminar">Eliminar</a>
-            </div>
-          </div>
-        </div>
-      </section>
-    </main>
-
-    <footer class="site-footer">
-      <div class="footer-content">
-        <div class="footer-logo">
-          <div>
-            <h4>EcoHospedajes Rurales</h4>
-            <p>Reservas en hospedajes rurales de Perú</p>
-          </div>
-        </div>
-        <div class="footer-links">
-          <div class="contenido-medio">
-            <h4>Enlaces Rápidos</h4>
-            <ul>
-              <li><a href="#">Inicio</a></li>
-              <li><a href="#">Catálogo</a></li>
-              <li><a href="#">Mis reservas</a></li>
-              <li><a href="#">Política de Privacidad</a></li>
-            </ul>
-          </div>
-        </div>
-        <div class="footer-social">
-          <div class="contenido-medio">
-            <h4>Síguenos</h4>
-            <a href="#">Facebook</a>
-            <a href="#">Instagram</a>
-            <a href="#">Twitter</a>
-          </div>
+  <footer class="site-footer">
+    <div class="footer-content">
+      <div class="footer-logo">
+        <div>
+          <h4>EcoHospedajes Rurales</h4>
+          <p>Reservas en hospedajes rurales de Perú</p>
         </div>
       </div>
-      <div class="footer-bottom">
-        <p>&copy; 2025 EcoHospedajes Rurales. Todos los derechos reservados.</p>
+      <div class="footer-links">
+        <div class="contenido-medio">
+          <h4>Enlaces Rápidos</h4>
+          <ul>
+            <li><a href="#">Inicio</a></li>
+            <li><a href="#">Catálogo</a></li>
+            <li><a href="#">Mis reservas</a></li>
+            <li><a href="#">Política de Privacidad</a></li>
+          </ul>
+        </div>
       </div>
-    </footer>
-  </body>
+      <div class="footer-social">
+        <div class="contenido-medio">
+          <h4>Síguenos</h4>
+          <a href="#">Facebook</a>
+          <a href="#">Instagram</a>
+          <a href="#">Twitter</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 EcoHospedajes Rurales. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+</body>
+
 </html>
