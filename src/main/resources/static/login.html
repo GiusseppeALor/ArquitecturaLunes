@@ -17,15 +17,40 @@
 
             <h1>Login</h1>
             
-            <form th:action="@{/verificarLogin}" method="post">
-                <label for="usuario">Usuario</label>
-                <input type="text" id="usuario" name="usuario" placeholder="Ingresa tu usuario" required>
+    <form id="loginForm">
+    <label for="usuario">Usuario</label>
+    <input type="text" id="usuario" placeholder="Ingresa tu usuario">
 
-                <label for="contrasena">Contraseña</label>
-                <input type="password" id="contrasena" name="contrasena" placeholder="Ingresa tu contraseña" required>
+    <label for="contrasena">Contraseña</label>
+    <input type="password" id="contrasena" placeholder="Ingresa tu contraseña">
 
-                <button type="submit">Ingresar</button>
-            </form>
+    <button type="submit">Ingresar</button>
+</form>
+
+<script>
+document.getElementById("loginForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const usuario = document.getElementById("usuario").value;
+    const contrasena = document.getElementById("contrasena").value;
+
+    const response = await fetch("http://localhost:8080/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: `usuario=${usuario}&contrasena=${contrasena}`
+    });
+
+    const result = await response.text();
+
+    if (result === "OK") {
+        alert("Login exitoso");
+        window.location.href = "/logeado/index.html";
+    } else {
+        alert("Usuario o contraseña incorrectos");
+    }
+});
+</script>
+
 
             <a href="/logindueño.html" class="forgot">Iniciar como dueño</a>
             <a href="/registrate.html" class="forgot">¿Aún no te has registrado?</a>

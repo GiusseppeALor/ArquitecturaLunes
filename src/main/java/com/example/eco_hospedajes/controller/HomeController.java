@@ -11,5 +11,9 @@ public class HomeController {
         return "index"; // Busca templates/index.html
     }
 
+    //@GetMapping("/login")
+    //public String mostrarLogin() {
+    //    return "redirect:/login.html";
+    //}
 }
 
