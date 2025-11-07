@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo | EcoHospedajes Rurales</title>
+    <link rel="stylesheet" href="/Css/catalogo.css">
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo">
+            <img src="/img/logo.jpg" alt="Logo" class="icono">
+            <div>
+                <h1>EcoHospedajes Rurales</h1>
+                <p>Reservas en hospedajes rurales de Perú</p>
+            </div>
+        </div>
+        <nav>
+            <a href="/index.html">Inicio</a>
+            <a href="/catalogo.html">Catálogo</a>
+            <a href="/login.html">Iniciar Sesión</a>
+        </nav>
+    </header>
+
+    <section class="buscador">
+        <input type="text" id="buscar" placeholder="Buscar hospedaje...">
+    </section>
+
+    <main id="catalogo" class="catalogo"></main>
+
+    <script>
+        async function cargarHospedajes() {
+            const res = await fetch("http://localhost:8080/api/hospedajes");
+            const hospedajes = await res.json();
+            const contenedor = document.getElementById("catalogo");
+            contenedor.innerHTML = "";
+
+            hospedajes.forEach(h => {
+                const card = document.createElement("div");
+                card.classList.add("card");
+                card.innerHTML = `
+                    <img src="${h.imagenUrl}" alt="${h.nombre}">
+                    <h3>${h.nombre}</h3>
+                    <p>${h.descripcion}</p>
+                    <p><strong>Ubicación:</strong> ${h.ubicacion}</p>
+                    <p><strong>Precio:</strong> S/. ${h.precio}</p>
+                `;
+                contenedor.appendChild(card);
+            });
+        }
+
+        // Filtro por nombre
+        document.getElementById("buscar").addEventListener("input", (e) => {
+            const texto = e.target.value.toLowerCase();
+            document.querySelectorAll(".card").forEach(card => {
+                card.style.display = card.textContent.toLowerCase().includes(texto) ? "" : "none";
+            });
+        });
+
+        cargarHospedajes();
+    </script>
+</body>
+</html>
