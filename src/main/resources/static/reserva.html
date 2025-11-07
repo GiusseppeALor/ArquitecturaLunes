@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Proceso de reserva</title>
+  <link rel="stylesheet" href="/Css/reserva.css">
+</head>
+<body>
+
+  <div class="reserva-container">
+    <h2>Proceso de reserva</h2>
+    <h3>Reserva Ahora</h3>
+
+    <form class="reserva-form" onsubmit="confirmarReserva(event)">
+      <label for="checkin">Seleccione fechas*</label>
+      <div class="date-group">
+        <input type="date" id="checkin" name="checkin" required>
+        <input type="date" id="checkout" name="checkout" required>
+      </div>
+
+      <label for="personas">Número de personas*</label>
+      <select id="personas" name="personas" required>
+        <option value="" disabled selected>Seleccione</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+      </select>
+
+      <div class="precio-detalle">
+        <p>Detalle de Precios</p>
+        <div class="precio-box">
+          <span>S/200 x 2 noches</span>
+          <span class="precio-total">S/400</span>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-confirmar">Confirmar reserva</button>
+    </form>
+  </div>
+
+  <script>
+  async function confirmarReserva(event) {
+    event.preventDefault();
+
+    const checkin = document.getElementById("checkin").value;
+    const checkout = document.getElementById("checkout").value;
+    const personas = document.getElementById("personas").value;
+
+    // Cálculo simple del precio
+    const precioPorNoche = 200;
+    const noches = (new Date(checkout) - new Date(checkin)) / (1000 * 60 * 60 * 24);
+    const precioTotal = precioPorNoche * noches;
+
+    const reserva = {
+      checkin,
+      checkout,
+      personas,
+      precioTotal
+    };
+
+    const response = await fetch("http://localhost:8080/api/reservas", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(reserva)
+    });
+
+    if (response.ok) {
+      alert("✅ Reserva confirmada. ¡Gracias por elegir EcoHospedajes Rurales!");
+      window.location.href = "index.html";
+    } else {
+      alert("❌ Ocurrió un error al registrar la reserva. Intenta nuevamente.");
+    }
+  }
+</script>
+
+
+</body>
+</html>

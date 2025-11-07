@@ -20,6 +20,12 @@ public class HospedajeController {
         return hospedajeRepository.findAll();
     }
 
+    @GetMapping("/{id}")
+    public Hospedaje obtenerHospedajePorId(@PathVariable Long id) {
+        return hospedajeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Hospedaje no encontrado con ID: " + id));
+    }
+
     @PostMapping
     public Hospedaje agregarHospedaje(@RequestBody Hospedaje hospedaje) {
         return hospedajeRepository.save(hospedaje);

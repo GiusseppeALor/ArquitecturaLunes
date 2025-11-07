@@ -39,17 +39,16 @@
                 const card = document.createElement("div");
                 card.classList.add("card");
                 card.innerHTML = `
-                    <img src="${h.imagenUrl}" alt="${h.nombre}">
-                    <h3>${h.nombre}</h3>
-                    <p>${h.descripcion}</p>
-                    <p><strong>Ubicación:</strong> ${h.ubicacion}</p>
-                    <p><strong>Precio:</strong> S/. ${h.precio}</p>
-                `;
+                 <img src="${h.imagenUrl}" alt="${h.nombre}">
+                 <h3>${h.nombre}</h3>
+                 <p>${h.descripcion}</p>
+                 <p><strong>Ubicación:</strong> ${h.ubicacion}</p>
+                 <p><strong>Precio:</strong> S/. ${h.precio}</p>
+                 <button onclick="window.location.href='detalle.html?id=${h.id}'">Ver más</button>`;
                 contenedor.appendChild(card);
             });
         }
 
-        // Filtro por nombre
         document.getElementById("buscar").addEventListener("input", (e) => {
             const texto = e.target.value.toLowerCase();
             document.querySelectorAll(".card").forEach(card => {
