@@ -57,7 +57,6 @@
     const checkout = document.getElementById("checkout").value;
     const personas = document.getElementById("personas").value;
 
-    // Cálculo simple del precio
     const precioPorNoche = 200;
     const noches = (new Date(checkout) - new Date(checkin)) / (1000 * 60 * 60 * 24);
     const precioTotal = precioPorNoche * noches;

@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import com.example.eco_hospedajes.model.Reserva;
 import com.example.eco_hospedajes.repository.ReservaRepository;
 
-@CrossOrigin(origins = "*") // Permite solicitudes desde tu frontend
+@CrossOrigin(origins = "*") 
 @RestController
 @RequestMapping("/api/reservas")
 public class ReservaController {

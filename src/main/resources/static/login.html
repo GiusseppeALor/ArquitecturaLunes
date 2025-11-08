@@ -47,10 +47,8 @@ document.getElementById("loginForm").addEventListener("submit", async (event) =>
     const data = await response.json();
 
     if (response.ok && !data.mensaje) {
-      // Guardar usuario en localStorage
       localStorage.setItem("usuarioLogueado", JSON.stringify(data));
 
-      // Redirigir al index
       window.location.href = "/logeado/index.html";
     } else {
       alert(data.mensaje || "Error al iniciar sesión");
