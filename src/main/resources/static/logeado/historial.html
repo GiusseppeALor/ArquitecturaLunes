@@ -4,64 +4,43 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Historial de Reservas - EcoHospedajes Rurales</title>
-    <link rel="stylesheet" href="/Css/gestion.css" />
+    <link rel="stylesheet" href="/css/gestion.css" />
   </head>
 
   <body>
-  <header class="navbar">
-    <div class="logo">
-      <img src="/img/logo.jpg" alt="Logo" class="icono">
-      <div>
-        <h1>EcoHospedajes Rurales</h1>
-        <p>Reservas en hospedajes rurales de Perú</p>
+    <header class="navbar">
+      <div class="logo">
+        <img src="/img/logo.jpg" alt="Logo" class="icono" />
+        <div>
+          <h1>EcoHospedajes Rurales</h1>
+          <p>Reservas en hospedajes rurales de Perú</p>
+        </div>
       </div>
-    </div>
-    <nav>
-      <a href="/logeado/index.html">Inicio</a>
-      <a href="/logeado/catalogo.html">Catálogo</a>
-      <a href="/logeado/historial.html">Reservas</a>
-      <a href="/logeado/perfil.html">Perfil</a>
-      <a href="/index.html" class="forgot"> Cerrar sesión </a>
-    </nav>
-  </header>
+      <nav>
+        <a href="/logeado/index.html">Inicio</a>
+        <a href="/logeado/catalogo.html">Catálogo</a>
+        <a href="/logeado/historial.html">Reservas</a>
+        <a href="/logeado/perfil.html">Perfil</a>
+        <a href="/index.html" class="forgot" id="btn-cerrar-sesion">
+          Cerrar sesión
+        </a>
+      </nav>
+    </header>
 
     <main>
       <h2>Historial de Reservas (Turista)</h2>
 
       <section>
-        <div class="tarjeta-reservas">
+        <div class="tarjeta-reservas" id="lista-reservas">
           <div class="reserva-header">
-            <span>Reservas pasadas</span>
-            <span>Reservas activas</span>
-            <span>Estado</span>
-          </div>
-
-          <div class="reserva-fila">
-            <div class="reserva-nombre">
-              <strong>El Refugio</strong>
-            </div>
-            <div class="reserva-fechas">10/02/2024 - 15/02/2024</div>
-            <div class="reserva-estado estado-cancelada">Cancelada</div>
-          </div>
-
-          <div class="reserva-fila">
-            <div class="reserva-nombre">
-              <strong>La Cueva</strong>
-            </div>
-            <div class="reserva-fechas">20/03/2024 - 22/03/2024</div>
-            <div class="reserva-estado estado-confirmada">Confirmada</div>
-          </div>
-
-          <div class="reserva-fila">
-            <div class="reserva-nombre">
-              <strong>El Jardín</strong>
-            </div>
-            <div class="reserva-fechas">20/03/2024 - 22/03/2024</div>
-            <div class="reserva-estado estado-confirmada">Confirmada</div>
+            <span class="header-item">Hospedaje</span>
+            <span class="header-item">Fechas</span>
+            <span class="header-item">Estado</span>
           </div>
         </div>
       </section>
     </main>
+
     <footer class="site-footer">
       <div class="footer-content">
         <div class="footer-logo">
@@ -94,5 +73,98 @@
         <p>&copy; 2024 EcoHospedajes Rurales. Todos los derechos reservados.</p>
       </div>
     </footer>
+
+    <script>
+      // --- FUNCIÓN AUXILIAR PARA FORMATEAR FECHAS ---
+      // Convierte "2024-10-20" en "20/10/2024"
+      function formatearFecha(fechaISO) {
+        if (!fechaISO) return "N/A";
+        const [year, month, day] = fechaISO.split("-");
+        return `${day}/${month}/${year}`;
+      }
+
+      // --- SCRIPT PRINCIPAL ---
+      document.addEventListener("DOMContentLoaded", () => {
+        // --- 1. OBTENER ID DE USUARIO Y REFERENCIAS ---
+        const usuarioId = localStorage.getItem("usuarioId");
+        const listaReservasContainer =
+          document.getElementById("lista-reservas");
+        const btnCerrarSesion = document.getElementById("btn-cerrar-sesion");
+
+        // --- 2. GESTIONAR CIERRE DE SESIÓN ---
+        btnCerrarSesion.addEventListener("click", (e) => {
+          // Prevenimos que el link nos lleve de inmediato
+          e.preventDefault();
+          // Limpiamos la memoria
+          localStorage.removeItem("usuarioId");
+          localStorage.removeItem("usuarioLogueado");
+          // Ahora sí, lo mandamos al inicio
+          window.location.href = "/index.html";
+        });
+
+        // --- 3. VERIFICAR LOGIN ---
+        if (!usuarioId) {
+          alert("Error: No has iniciado sesión. Serás redirigido.");
+          window.location.href = "/login.html";
+          return;
+        }
+
+        // --- 4. FUNCIÓN PARA CARGAR LAS RESERVAS ---
+        async function cargarReservas() {
+          try {
+            // Llamamos al endpoint GET que creamos en Spring Boot
+            const response = await fetch(`/api/reservas/usuario/${usuarioId}`);
+
+            if (!response.ok) {
+              throw new Error("No se pudo cargar tu historial de reservas.");
+            }
+
+            const reservas = await response.json();
+
+            // Si no hay reservas, mostrar un mensaje
+            if (reservas.length === 0) {
+              listaReservasContainer.innerHTML +=
+                '<p class="reserva-vacia">No tienes reservas en tu historial.</p>';
+              return;
+            }
+
+            // --- 5. "PINTAR" LAS RESERVAS EN EL HTML ---
+            reservas.forEach((reserva) => {
+              // Creamos la fila de la reserva
+              const fila = document.createElement("div");
+              fila.className = "reserva-fila";
+
+              // Definimos la clase CSS para el estado
+              // (Ej: "estado-confirmada", "estado-cancelada")
+              const claseEstado = `estado-${String(
+                reserva.estado
+              ).toLowerCase()}`;
+
+              // Llenamos la fila con los datos de la reserva
+              fila.innerHTML = `
+                        <div class="reserva-nombre">
+                            <strong>${reserva.hospedaje.nombre}</strong>
+                        </div>
+                        <div class="reserva-fechas">${formatearFecha(
+                          reserva.checkin
+                        )} - ${formatearFecha(reserva.checkout)}</div>
+                        <div class="reserva-estado ${claseEstado}">${
+                reserva.estado
+              }</div>
+                    `;
+
+              // Añadimos la fila al contenedor
+              listaReservasContainer.appendChild(fila);
+            });
+          } catch (error) {
+            console.error(error);
+            listaReservasContainer.innerHTML += `<p class="reserva-vacia estado-cancelada">${error.message}</p>`;
+          }
+        }
+
+        // --- 6. EJECUTAR LA FUNCIÓN AL CARGAR LA PÁGINA ---
+        cargarReservas();
+      });
+    </script>
   </body>
 </html>

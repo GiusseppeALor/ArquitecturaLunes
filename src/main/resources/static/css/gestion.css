@@ -1,0 +1,268 @@
+/* --- ESTILOS GENERALES Y DE MARCA --- */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+  /* Color de fondo verde salvia de tu página de inicio */
+  background-color: #f4f4f4; /* Un fondo neutro para la gestión */
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- ESTILO DEL NAVBAR (COPIADO DE TU APP) --- */
+.navbar {
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  padding: 10px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.navbar .logo {
+  display: flex;
+  align-items: center;
+}
+.navbar .icono {
+  width: 40px; /* Ajusta el tamaño de tu logo */
+  height: 40px;
+  margin-right: 10px;
+}
+.navbar .logo h1 {
+  font-size: 1.2rem;
+  margin: 0;
+  color: #333;
+}
+.navbar .logo p {
+  font-size: 0.8rem;
+  margin: 0;
+  color: #666;
+}
+.navbar nav a {
+  text-decoration: none;
+  color: #555;
+  margin-left: 20px;
+  font-weight: 500;
+}
+.navbar nav a.forgot {
+  color: #d9534f; /* Un color de "cerrar sesión" */
+  font-weight: 600;
+}
+
+/* --- CONTENIDO PRINCIPAL --- */
+main {
+  flex: 1; /* Hace que el main ocupe el espacio restante */
+  max-width: 900px;
+  width: 100%;
+  margin: 40px auto; /* Centrado */
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
+main h2 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 24px;
+}
+
+/* --- TARJETA DE RESERVAS (ESTILO DE LA IMAGEN) --- */
+.tarjeta-reservas {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  overflow: hidden; /* Para que los bordes redondeados se apliquen a las filas */
+}
+
+/* --- FILA DEL HEADER --- */
+.reserva-header {
+  display: grid;
+  /* 3 columnas: Nombre (flexible), Fechas (fijo), Estado (fijo) */
+  grid-template-columns: 2fr 1.5fr 1fr;
+  align-items: center;
+  padding: 16px 24px;
+  background-color: #f9f9f9;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.reserva-header .header-item {
+  font-size: 14px;
+  font-weight: 600;
+  color: #606770;
+  text-transform: uppercase;
+}
+
+/* --- FILA DE CADA RESERVA --- */
+.reserva-fila {
+  display: grid;
+  grid-template-columns: 2fr 1.5fr 1fr;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid #e0e0e0;
+}
+/* Evita la última línea */
+.reserva-fila:last-child {
+  border-bottom: none;
+}
+
+.reserva-nombre strong {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1c1e21;
+}
+
+.reserva-fechas {
+  font-size: 15px;
+  color: #333;
+}
+
+/* --- ESTILOS DE ESTADO --- */
+.reserva-estado {
+  font-size: 15px;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.estado-confirmada {
+  color: #388e3c; /* Verde */
+  background-color: #e8f5e9;
+}
+
+.estado-cancelada {
+  color: #d32f2f; /* Rojo */
+  background-color: #ffebee;
+}
+
+.estado-pendiente {
+  /* Por si lo añades en el futuro */
+  color: #f57c00; /* Naranja */
+  background-color: #fff3e0;
+}
+
+/* Mensaje si no hay reservas */
+.reserva-vacia {
+  padding: 30px;
+  text-align: center;
+  font-size: 16px;
+  color: #606770;
+}
+
+/* --- ESTILO DEL FOOTER (PIE DE PÁGINA) --- */
+
+/* --- ESTILO DEL FOOTER (PIE DE PÁGINA) --- */
+
+.site-footer {
+  /* Colores */
+  background-color: #8faba0; /* Tu verde salvia */
+  color: #f4f4f4; /* Letras en blanco suave */
+
+  /* Espaciado */
+  padding: 50px 60px; /* Más espacio */
+  margin-top: 40px;
+}
+
+/* Contenedor principal de las 3 columnas */
+.site-footer .footer-content {
+  /*
+      --- LA CLAVE DEL CAMBIO: USAMOS GRID ---
+      Esto crea 3 columnas (1fr, 1fr, 1fr) de tamaño idéntico.
+    */
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 30px; /* Espacio entre las columnas */
+
+  /* Centrado */
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-bottom: 30px;
+}
+
+/* Alineación del contenido dentro de cada columna */
+.site-footer .footer-logo,
+.site-footer .footer-links,
+.site-footer .footer-social {
+  /* Esto alinea el contenido de "Enlaces" y "Síguenos" a la izquierda
+      de su propia columna, creando un look limpio.
+    */
+  text-align: left;
+}
+
+/* Ajuste para la columna de la derecha ("Síguenos") */
+.site-footer .footer-social {
+  /* Puedes experimentar con esto. 
+      'left' se ve más ordenado, pero 'right' también es común.
+    */
+  text-align: left;
+}
+
+/* --- ESTILOS DE TEXTO (Letras blancas) --- */
+
+/* Títulos (Enlaces Rápidos, Síguenos) */
+.site-footer h4 {
+  font-size: 1.1rem;
+  color: #ffffff; /* Blanco brillante */
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+/* Logo */
+.site-footer .footer-logo h4 {
+  font-size: 1.3rem;
+}
+.site-footer .footer-logo p {
+  color: #f4f4f4;
+  max-width: 300px;
+}
+
+/* Links (Enlaces y Redes Sociales) */
+.site-footer ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.site-footer ul li a,
+.site-footer .footer-social a {
+  text-decoration: none;
+  color: #f4f4f4;
+  display: block;
+  margin-bottom: 8px;
+  transition: color 0.2s;
+}
+
+.site-footer ul li a:hover,
+.site-footer .footer-social a:hover {
+  color: #ffffff;
+}
+
+/* --- BARRA INFERIOR (Copyright) --- */
+.site-footer .footer-bottom {
+  text-align: center;
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 0.9rem;
+  color: #f4f4f4;
+}
+
+/* --- AJUSTE PARA MÓVILES --- */
+/* Cuando la pantalla sea muy pequeña, las 3 columnas se pondrán una encima de otra */
+@media (max-width: 768px) {
+  .site-footer .footer-content {
+    grid-template-columns: 1fr; /* Una sola columna */
+    text-align: center; /* Centramos todo en móvil */
+  }
+
+  .site-footer .footer-logo,
+  .site-footer .footer-links,
+  .site-footer .footer-social {
+    text-align: center; /* Centrar todas las columnas */
+  }
+
+  .site-footer .footer-logo p {
+    margin-left: auto;
+    margin-right: auto;
+  }
+}

@@ -1,80 +1,164 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Proceso de reserva</title>
-  <link rel="stylesheet" href="/Css/reserva.css">
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Proceso de reserva</title>
+    <link rel="stylesheet" href="/css/reserva.css" />
+  </head>
+  <body>
+    <div class="reserva-container">
+      <h2>Proceso de reserva</h2>
+      <h3 id="hospedaje-nombre">Reserva Ahora</h3>
 
-  <div class="reserva-container">
-    <h2>Proceso de reserva</h2>
-    <h3>Reserva Ahora</h3>
-
-    <form class="reserva-form" onsubmit="confirmarReserva(event)">
-      <label for="checkin">Seleccione fechas*</label>
-      <div class="date-group">
-        <input type="date" id="checkin" name="checkin" required>
-        <input type="date" id="checkout" name="checkout" required>
-      </div>
-
-      <label for="personas">Número de personas*</label>
-      <select id="personas" name="personas" required>
-        <option value="" disabled selected>Seleccione</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-      </select>
-
-      <div class="precio-detalle">
-        <p>Detalle de Precios</p>
-        <div class="precio-box">
-          <span>S/200 x 2 noches</span>
-          <span class="precio-total">S/400</span>
+      <form class="reserva-form" id="reservaForm">
+        <label for="checkin">Seleccione fechas*</label>
+        <div class="date-group">
+          <input type="date" id="checkin" name="checkin" required />
+          <input type="date" id="checkout" name="checkout" required />
         </div>
-      </div>
 
-      <button type="submit" class="btn-confirmar">Confirmar reserva</button>
-    </form>
-  </div>
+        <label for="personas">Número de personas*</label>
+        <select id="personas" name="personas" required>
+          <option value="" disabled selected>Seleccione</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+        </select>
 
-  <script>
-  async function confirmarReserva(event) {
-    event.preventDefault();
+        <div class="precio-detalle">
+          <p>Detalle de Precios</p>
+          <div class="precio-box">
+            <span id="detalle-calculo">S/0 x 0 noches</span>
+            <span class="precio-total" id="precio-final">S/0</span>
+          </div>
+        </div>
 
-    const checkin = document.getElementById("checkin").value;
-    const checkout = document.getElementById("checkout").value;
-    const personas = document.getElementById("personas").value;
+        <button type="submit" class="btn-confirmar">Confirmar reserva</button>
+      </form>
+    </div>
 
-    // Cálculo simple del precio
-    const precioPorNoche = 200;
-    const noches = (new Date(checkout) - new Date(checkin)) / (1000 * 60 * 60 * 24);
-    const precioTotal = precioPorNoche * noches;
+    <script>
+      // --- Variables Globales ---
+      let precioPorNoche = 0;
+      let hospedajeId = null;
+      let usuarioId = null;
 
-    const reserva = {
-      checkin,
-      checkout,
-      personas,
-      precioTotal
-    };
+      // --- Referencias a elementos del DOM ---
+      const form = document.getElementById("reservaForm");
+      const checkinInput = document.getElementById("checkin");
+      const checkoutInput = document.getElementById("checkout");
+      const detalleCalculoEl = document.getElementById("detalle-calculo");
+      const precioFinalEl = document.getElementById("precio-final");
 
-    const response = await fetch("http://localhost:8080/api/reservas", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(reserva)
-    });
+      // --- 1. EJECUTAR AL CARGAR LA PÁGINA ---
+      document.addEventListener("DOMContentLoaded", () => {
+        // Leer datos del Login (de localStorage)
+        usuarioId = localStorage.getItem("usuarioId");
 
-    if (response.ok) {
-      alert("✅ Reserva confirmada. ¡Gracias por elegir EcoHospedajes Rurales!");
-      window.location.href = "index.html";
-    } else {
-      alert("❌ Ocurrió un error al registrar la reserva. Intenta nuevamente.");
-    }
-  }
-</script>
+        if (!usuarioId) {
+          alert("Debes iniciar sesión para reservar.");
+          window.location.href = "/login.html"; // Redirigir al login
+          return;
+        }
 
+        // Leer datos del Hospedaje (de la URL)
+        const params = new URLSearchParams(window.location.search);
+        hospedajeId = params.get("id");
+        const nombre = params.get("nombre");
+        precioPorNoche = parseFloat(params.get("precio")) || 0; // Convertir a número
 
-</body>
+        if (!hospedajeId) {
+          alert("Error: No se especificó un hospedaje.");
+          window.location.href = "/catalogo.html"; // Redirigir al catálogo
+          return;
+        }
+
+        // Actualizar la vista
+        document.getElementById(
+          "hospedaje-nombre"
+        ).textContent = `Reserva ahora en ${nombre}`;
+        actualizarPrecio(); // Pone el precio base
+      });
+
+      // --- 2. FUNCIÓN PARA ACTUALIZAR EL PRECIO (DINÁMICO) ---
+      function actualizarPrecio() {
+        const checkin = new Date(checkinInput.value);
+        const checkout = new Date(checkoutInput.value);
+        let noches = 0;
+
+        // Validar que las fechas sean correctas
+        if (checkinInput.value && checkoutInput.value && checkout > checkin) {
+          noches = (checkout - checkin) / (1000 * 60 * 60 * 24);
+        }
+
+        const precioTotal = precioPorNoche * noches;
+
+        // Actualizar el HTML
+        detalleCalculoEl.textContent = `S/${precioPorNoche} x ${noches} noches`;
+        precioFinalEl.textContent = `S/${precioTotal.toFixed(2)}`;
+      }
+
+      // --- 3. ASIGNAR EVENTOS A LOS INPUTS DE FECHA ---
+      checkinInput.addEventListener("change", actualizarPrecio);
+      checkoutInput.addEventListener("change", actualizarPrecio);
+
+      // --- 4. ENVIAR EL FORMULARIO ---
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault(); // Evitar que la página recargue
+
+        // Obtener los valores finales
+        const checkin = checkinInput.value;
+        const checkout = checkoutInput.value;
+        const personas = document.getElementById("personas").value;
+        const noches =
+          (new Date(checkout) - new Date(checkin)) / (1000 * 60 * 60 * 24);
+
+        if (noches <= 0) {
+          alert("La fecha de salida debe ser posterior a la fecha de entrada.");
+          return;
+        }
+
+        const precioTotal = precioPorNoche * noches;
+
+        // --- ¡ESTE ES EL OBJETO CORRECTO PARA EL BACKEND! ---
+        const reserva = {
+          checkin: checkin,
+          checkout: checkout,
+          personas: parseInt(personas), // Convertir a número
+          precioTotal: precioTotal,
+          estado: "Confirmada", // Estado por defecto
+
+          // --- Las conexiones que faltaban ---
+          usuario: {
+            id: usuarioId,
+          },
+          hospedaje: {
+            id: hospedajeId,
+          },
+        };
+
+        // --- 5. LLAMAR A LA API (POST) ---
+        try {
+          const response = await fetch("http://localhost:8080/api/reservas", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(reserva),
+          });
+
+          if (response.ok) {
+            alert("✅ ¡Reserva confirmada con éxito!");
+            // Redirigir al historial para ver la nueva reserva
+            window.location.href = "/logeado/historial.html";
+          } else {
+            throw new Error("Error del servidor al crear la reserva.");
+          }
+        } catch (error) {
+          console.error(error);
+          alert(`❌ Ocurrió un error: ${error.message}`);
+        }
+      });
+    </script>
+  </body>
 </html>
