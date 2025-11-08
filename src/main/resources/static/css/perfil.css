@@ -1,0 +1,152 @@
+/* Estilos generales del cuerpo */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+  /* NUEVO COLOR: Este es el verde salvia de tu página de inicio 
+    */
+  background-color: #8faba0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+/* El contenedor de la tarjeta */
+.profile-container {
+  max-width: 500px;
+  width: 100%;
+  padding: 20px;
+}
+
+/* La tarjeta blanca del perfil (coincide con tu header) */
+.profile-card {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  padding: 32px;
+}
+
+/* Título principal "Perfil de Usuario" */
+.title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #333; /* Texto oscuro */
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+/* Contenedor para "Datos personales" y el botón "Editar" */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.section-header h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+  color: #333;
+}
+
+/* Botón "Editar" / "Guardar" */
+.edit-btn {
+  /*
+      NUEVO ESTILO: Botón blanco con texto oscuro, como en tu web 
+    */
+  background-color: #f0f0f0; /* Un gris muy claro */
+  color: #333;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.edit-btn:hover {
+  background-color: #e9e9e9; /* Un gris un poco más oscuro al pasar el ratón */
+}
+
+/* Contenedor de la información del usuario */
+.user-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.info-text {
+  flex-grow: 1;
+}
+
+/* Cada item de información (Label + Input) */
+.info-item {
+  margin-bottom: 16px;
+}
+
+/* Estilo de la etiqueta (Nombre, Apellidos, etc.) */
+.info-item .label {
+  font-size: 14px;
+  color: #606770; /* Un gris para el texto secundario */
+  margin-bottom: 4px;
+}
+
+/* Estilo de los campos de texto */
+.info-item .info-value {
+  font-size: 16px;
+  color: #1c1e21;
+  padding: 8px 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  width: 90%;
+}
+
+/* Estilo cuando el input está en modo 'readonly' */
+.info-item .info-value[readonly] {
+  border-color: transparent;
+  background-color: #f5f6f7; /* Fondo gris claro para campos no editables */
+  padding-left: 10px;
+}
+
+/* Foto de perfil */
+.profile-pic {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-left: 20px;
+  border: 1px solid #ddd;
+}
+
+/* Línea divisoria */
+.divider {
+  height: 1px;
+  background-color: #e0e0e0;
+  margin: 24px 0;
+}
+
+/* Opciones de "Cambio de contraseña" */
+.option {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: #1c1e21;
+  cursor: pointer;
+}
+
+.option .arrow {
+  font-size: 20px;
+  color: #606770;
+}
+
+.option:hover {
+  background-color: #f5f6f7; /* Gris claro al pasar el ratón */
+  border-radius: 6px;
+  padding: 16px 10px;
+  margin: 0 -10px;
+}
