@@ -8,15 +8,6 @@
 </head>
 <body>
 
-  <script>
-  const usuario = JSON.parse(localStorage.getItem("usuario"));
-  if (!usuario || usuario.rol !== "cliente") {
-    alert("Debes iniciar sesión para acceder a esta página.");
-    window.location.href = "/login.html";
-  }
-  </script>
-
-
   <div class="reserva-container">
     <h2>Proceso de reserva</h2>
     <h3>Reserva Ahora</h3>

@@ -10,10 +10,5 @@ public class HomeController {
     public String index() {
         return "index"; // Busca templates/index.html
     }
-
-    //@GetMapping("/login")
-    //public String mostrarLogin() {
-    //    return "redirect:/login.html";
-    //}
 }
 

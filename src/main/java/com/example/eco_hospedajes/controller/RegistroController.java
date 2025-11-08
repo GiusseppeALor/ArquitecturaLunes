@@ -13,29 +13,22 @@ public class RegistroController {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    public static class RegistroRequest {
+        public String nombre;
+        public String apellidos;
+        public String email;
+        public String contrasena;
+    }
+
     @PostMapping("/registro")
-    public String registrarUsuario(@RequestParam String usuario,
-                                   @RequestParam String contrasena,
-                                   @RequestParam String nombre,
-                                   @RequestParam String correo,
-                                   @RequestParam(defaultValue = "cliente") String rol) {
+    public Usuario registrarUsuario(@RequestBody RegistroRequest request) {
+        Usuario usuario = new Usuario();
+        usuario.setNombre(request.nombre);
+        usuario.setApellidos(request.apellidos);
+        usuario.setEmail(request.email);
+        usuario.setContrasena(request.contrasena);
+        usuario.setRol("CLIENTE");
 
-        // Verificar si el usuario ya existe
-        Usuario existente = usuarioRepository.findByUsuarioAndContrasena(usuario, contrasena);
-        if (existente != null) {
-            return "EXISTE";
-        }
-
-        // Crear nuevo usuario
-        Usuario nuevo = new Usuario();
-        nuevo.setUsuario(usuario);
-        nuevo.setContrasena(contrasena);
-        nuevo.setNombre(nombre);
-        nuevo.setRol(rol);
-        // Si agregaste el campo correo en tu modelo:
-        // nuevo.setCorreo(correo);
-
-        usuarioRepository.save(nuevo);
-        return "OK";
+        return usuarioRepository.save(usuario);
     }
 }

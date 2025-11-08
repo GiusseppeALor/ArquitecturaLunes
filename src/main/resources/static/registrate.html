@@ -16,13 +16,14 @@
 
             <h1>Regístrate en nuestra plataforma</h1>
 
-            <form id="registroForm">
-                <input type="text" name="usuario" placeholder="Nombre de usuario" required>
-                <input type="text" name="nombre" placeholder="Nombre completo" required>
-                <input type="email" name="correo" placeholder="Correo electrónico" required>
-                <input type="password" name="contrasena" placeholder="Contraseña" required>
-                <button type="submit">Registrarse</button>
+            <form id="formRegistro">
+                <input type="text" id="nombre" placeholder="Nombre">
+                <input type="text" id="apellidos" placeholder="Apellidos">
+                <input type="email" id="email" placeholder="Correo electrónico">
+                <input type="password" id="contrasena" placeholder="Contraseña">
+                <button type="submit">Registrarme</button>
             </form>
+
 
             <p class="switch-text">¿Ya tienes una cuenta? 
                 <a href="/login.html">Inicia sesión</a>
@@ -31,29 +32,31 @@
     </div>
 
     <script>
-        document.getElementById("registroForm").addEventListener("submit", async function(e) {
-            e.preventDefault();
+       document.getElementById("formRegistro").addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-            const formData = new FormData(this);
-            const params = new URLSearchParams(formData);
+  const nombre = document.getElementById("nombre").value;
+  const apellidos = document.getElementById("apellidos").value;
+  const email = document.getElementById("email").value;
+  const contrasena = document.getElementById("contrasena").value;
 
-            const response = await fetch("http://localhost:8080/api/registro", {
-                method: "POST",
-                body: params
-            });
+  const data = { nombre, apellidos, email, contrasena };
 
-            const result = await response.text();
+  const response = await fetch("http://localhost:8080/api/usuarios", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
 
-            if (result === "OK") {
-                alert("✅ Registro exitoso");
-                window.location.href = "/login.html";
-            } else if (result === "EXISTE") {
-                alert("⚠️ El usuario ya existe");
-            } else {
-                alert("❌ Error al registrar usuario");
-            }
-        });
+  if (response.ok) {
+    alert("Registro exitoso");
+  } else {
+    alert("Error al registrarse");
+  }
+});
+
     </script>
+
 </body>
 </html>
 

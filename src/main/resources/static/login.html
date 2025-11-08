@@ -1,60 +1,68 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login | EcoHospedajes Rurales</title>
-    <link rel="stylesheet" href="/Css/login.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Iniciar Sesión | EcoHospedajes Rurales</title>
+  <link rel="stylesheet" href="/Css/login.css">
 </head>
 <body>
-    <div class="login-container">
-        <div class="login-box">
-            <div class="logo">
-                <img src="/img/logo.jpg" alt="Logo" class="icono">
-                <h2>EcoHospedajes Rurales</h2>
-                <p>Reservas en hospedajes rurales de Perú</p>
-            </div>
 
-            <h1>Login</h1>
-            
-    <form id="loginForm">
-    <label for="usuario">Usuario</label>
-    <input type="text" id="usuario" placeholder="Ingresa tu usuario">
+  <div class="login-container">
+    <div class="login-box">
+      <div class="logo">
+        <img src="/img/logo.jpg" alt="Logo">
+        <h2>EcoHospedajes Rurales</h2>
+      </div>
 
-    <label for="contrasena">Contraseña</label>
-    <input type="password" id="contrasena" placeholder="Ingresa tu contraseña">
+      <h1>Inicia sesión</h1>
 
-    <button type="submit">Ingresar</button>
-</form>
+      <form id="loginForm">
+        <input type="email" id="email" placeholder="Correo electrónico" required>
+        <input type="password" id="contrasena" placeholder="Contraseña" required>
+        <button type="submit">Entrar</button>
+      </form>
+
+      <p class="switch-text">
+        ¿No tienes una cuenta?
+        <a href="/registrate.html">Regístrate aquí</a>
+      </p>
+    </div>
+  </div>
 
 <script>
-document.getElementById("loginForm").addEventListener("submit", async (e) => {
-    e.preventDefault();
+document.getElementById("loginForm").addEventListener("submit", async (event) => {
+  event.preventDefault();
 
-    const usuario = document.getElementById("usuario").value;
-    const contrasena = document.getElementById("contrasena").value;
+  const email = document.getElementById("email").value;
+  const contrasena = document.getElementById("contrasena").value;
 
+  try {
     const response = await fetch("http://localhost:8080/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: `usuario=${usuario}&contrasena=${contrasena}`
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, contrasena }),
     });
 
-    const result = await response.text();
+    const data = await response.json();
 
-    if (result === "OK") {
-        alert("Login exitoso");
-        window.location.href = "/logeado/index.html";
+    if (response.ok && !data.mensaje) {
+      // Guardar usuario en localStorage
+      localStorage.setItem("usuarioLogueado", JSON.stringify(data));
+
+      // Redirigir al index
+      window.location.href = "/logeado/index.html";
     } else {
-        alert("Usuario o contraseña incorrectos");
+      alert(data.mensaje || "Error al iniciar sesión");
     }
+  } catch (error) {
+    console.error("Error al iniciar sesión:", error);
+    alert("Error al conectar con el servidor");
+  }
 });
 </script>
 
 
-            <a href="/logindueño.html" class="forgot">Iniciar como dueño</a>
-            <a href="/registrate.html" class="forgot">¿Aún no te has registrado?</a>
-        </div>
-    </div> 
+
 </body>
 </html>

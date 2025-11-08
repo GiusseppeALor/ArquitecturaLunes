@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detalle del Hospedaje | EcoHospedajes Rurales</title>
+  <link rel="stylesheet" href="/Css/detalle.css">
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="logo">
+      <img src="/img/logo.jpg" alt="Logo" class="icono">
+      <div>
+        <h1>EcoHospedajes Rurales</h1>
+        <p>Reservas en hospedajes rurales de Perú</p>
+      </div>
+    </div>
+    <nav>
+      <a href="/index.html">Inicio</a>
+      <a href="/catalogo.html">Catálogo</a>
+      <a href="/login.html">Iniciar Sesión</a>
+    </nav>
+  </header>
+
+  <section class="detalle" id="detalle">
+  </section>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("id");
+
+    async function cargarDetalle() {
+      try {
+        const res = await fetch(`http://localhost:8080/api/hospedajes/${id}`);
+        const h = await res.json();
+
+        const contenedor = document.getElementById("detalle");
+        contenedor.innerHTML = `
+          <div class="imagenes">
+            <img src="${h.imagenUrl}" alt="${h.nombre}">
+            <img src="${h.imagenUrl}" alt="Vista adicional">
+            <img src="${h.imagenUrl}" alt="Otra vista">
+          </div>
+
+          <div class="info">
+            <h2 class="nombre-hospedaje">${h.nombre}</h2>
+            <div class="valoracion">
+              <span class="estrellas">★★★★★</span>
+              <span class="puntaje">${(Math.random() * (5 - 4) + 4).toFixed(1)}</span>
+            </div>
+
+            <p class="comentario">
+              “${h.descripcion.substring(0, 100)}...”
+            </p>
+
+            <h3>Descripción</h3>
+            <p>${h.descripcion}</p>
+
+            <h3>Incluye</h3>
+            <ul>
+              <li>Hospedaje rural con encanto</li>
+              <li>Desayuno artesanal</li>
+              <li>Senderos naturales</li>
+              <li>Fogatas nocturnas</li>
+              <li>Guías locales</li>
+              <li>Zona de descanso con hamacas</li>
+            </ul>
+
+            <div class="precio">
+              <p><strong>Desde S/${h.precio} / noche</strong></p>
+              <button class="reservar" onclick="irAReserva(${h.id}, '${h.nombre}', ${h.precio})">
+                Reservar
+              </button>
+            </div>
+          </div>
+        `;
+      } catch (error) {
+        document.getElementById("detalle").innerHTML = `<p>Error al cargar el hospedaje.</p>`;
+      }
+    }
+
+    function irAReserva(id, nombre, precio) {
+      window.location.href = `/logeado/reserva.html?id=${id}&nombre=${encodeURIComponent(nombre)}&precio=${precio}`;
+    }
+
+    cargarDetalle();
+  </script>
+
+</body>
+</html>
