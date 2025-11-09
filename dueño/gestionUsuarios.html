@@ -18,7 +18,7 @@
       <a href="/dueño/dashboard.html"><i data-lucide="home"></i> Dashboard</a>
       <a href="/dueño/gestionUsuarios.html" class="active"><i data-lucide="user"></i> Usuarios</a>
       <a href="/dueño/gestionHospedajes.html"><i data-lucide="hotel"></i> Hospedajes</a>
-      <a href="/dueño/gestionReservas.html"></i> Reservas</a>
+      <a href="/dueño/gestionReservas.html"><i data-lucide="calendar"></i> Reservas</a>
     </nav>
   </aside>
 
@@ -27,48 +27,397 @@
     <h1>Gestión de usuarios</h1>
 
     <section class="buscador">
-      <input type="text" placeholder="Buscar usuario..." />
-      <button>Buscar</button>
+      <input type="text" id="buscarInput" placeholder="Buscar usuario..." />
+      <button id="btnBuscar">Buscar</button>
     </section>
 
-    <table>
+    <table id="tablaUsuarios">
       <thead>
         <tr>
           <th>Nombre</th>
           <th>Rol</th>
+          <th>Estado</th>
+          <th>Acciones</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td>Fernando Lopez</td>
-          <td>Turista</td>
-        </tr>
-        <tr>
-          <td>Iojan Ramos</td>
-          <td>Turista</td>
-        </tr>
-        <tr>
-          <td>Pedro Kavas</td>
-          <td>Turista</td>
-        </tr>
-        <tr>
-          <td>Gabriel Castillo</td>
-          <td>Dueño</td>
-        </tr>
-        <tr>
-          <td>Maria Candia</td>
-          <td>Turista</td>
-        </tr>
-        <tr>
-          <td>Mauro García</td>
-          <td>Administrador</td>
-        </tr>
+    <td>Fernando Lopez</td>
+    <td>Turista</td>
+    <td class="estado">Activo</td>
+    <td>
+      <button class="btn-estado">Desactivar</button>
+      <button class="btn-rol">Asignar Rol</button>
+    </td>
+  </tr>
+  <tr>
+    <td>Laura Fernández</td>
+    <td>Recepcionista</td>
+    <td class="estado">Inactivo</td>
+    <td>
+      <button class="btn-estado">Activar</button>
+      <button class="btn-rol">Asignar Rol</button>
+    </td>
+  </tr>
+  <tr>
+    <td>Gabriel Castillo</td>
+    <td>Dueño</td>
+    <td class="estado">Activo</td>
+    <td>
+      <button class="btn-estado">Desactivar</button>
+      <button class="btn-rol">Asignar Rol</button>
+    </td>
+  </tr>
+  <tr>
+    <td>Diego Salazar</td>
+    <td>Dueño</td>
+    <td class="estado">Activo</td>
+    <td>
+      <button class="btn-estado">Desactivar</button>
+      <button class="btn-rol">Asignar Rol</button>
+    </td>
+  </tr>
+  <tr>
+    <td>Camila Torres</td>
+    <td>Turista</td>
+    <td class="estado">Inactivo</td>
+    <td>
+      <button class="btn-estado">Activar</button>
+      <button class="btn-rol">Asignar Rol</button>
+    </td>
+  </tr>
+  <tr>
+    <td>Javier Ruiz</td>
+    <td>Administrador</td>
+    <td class="estado">Activo</td>
+    <td>
+      <button class="btn-estado">Desactivar</button>
+      <button class="btn-rol">Asignar Rol</button>
+    </td>
+  </tr>
+  <tr>
+    <td>Patricia Aguilar</td>
+    <td>Turista</td>
+    <td class="estado">Activo</td>
+    <td>
+      <button class="btn-estado">Desactivar</button>
+      <button class="btn-rol">Asignar Rol</button>
+    </td>
+  </tr>
+  <tr>
+    <td>Andrés Vega</td>
+    <td>Recepcionista</td>
+    <td class="estado">Inactivo</td>
+    <td>
+      <button class="btn-estado">Activar</button>
+      <button class="btn-rol">Asignar Rol</button>
+    </td>
+  </tr>
+  <tr>
+    <td>Lucía Mendoza</td>
+    <td>Dueño</td>
+    <td class="estado">Activo</td>
+    <td>
+      <button class="btn-estado">Desactivar</button>
+      <button class="btn-rol">Asignar Rol</button>
+    </td>
+  </tr>
+  <tr>
+    <td>Rodrigo Pérez</td>
+    <td>Turista</td>
+    <td class="estado">Activo</td>
+    <td>
+      <button class="btn-estado">Desactivar</button>
+      <button class="btn-rol">Asignar Rol</button>
+    </td>
+  </tr>
+  <tr>
+    <td>Valeria Castro</td>
+    <td>Recepcionista</td>
+    <td class="estado">Inactivo</td>
+    <td>
+      <button class="btn-estado">Activar</button>
+      <button class="btn-rol">Asignar Rol</button>
+    </td>
+  </tr>
+  <tr>
+    <td>Sebastián Huamán</td>
+    <td>Administrador</td>
+    <td class="estado">Activo</td>
+    <td>
+      <button class="btn-estado">Desactivar</button>
+      <button class="btn-rol">Asignar Rol</button>
+    </td>
+  </tr>
+  <tr>
+    <td>Diana Rojas</td>
+    <td>Dueño</td>
+    <td class="estado">Activo</td>
+    <td>
+      <button class="btn-estado">Desactivar</button>
+      <button class="btn-rol">Asignar Rol</button>
+    </td>
+  </tr>
+  <tr>
+    <td>José Ramírez</td>
+    <td>Turista</td>
+    <td class="estado">Inactivo</td>
+    <td>
+      <button class="btn-estado">Activar</button>
+      <button class="btn-rol">Asignar Rol</button>
+    </td>
+  </tr>
+  <tr>
+    <td>Rafael Quispe</td>
+    <td>Recepcionista</td>
+    <td class="estado">Activo</td>
+    <td>
+      <button class="btn-estado">Desactivar</button>
+      <button class="btn-rol">Asignar Rol</button>
+    </td>
+  </tr>
+  <tr>
+    <td>Claudia Espinoza</td>
+    <td>Turista</td>
+    <td class="estado">Activo</td>
+    <td>
+      <button class="btn-estado">Desactivar</button>
+      <button class="btn-rol">Asignar Rol</button>
+    </td>
+  </tr>
+  <tr>
+    <td>María Candia</td>
+    <td>Turista</td>
+    <td class="estado">Inactivo</td>
+    <td>
+      <button class="btn-estado">Activar</button>
+      <button class="btn-rol">Asignar Rol</button>
+    </td>
+  </tr>
+  <tr>
+    <td>Mauro García</td>
+    <td>Administrador</td>
+    <td class="estado">Activo</td>
+    <td>
+      <button class="btn-estado">Desactivar</button>
+      <button class="btn-rol">Asignar Rol</button>
+    </td>
+  </tr>
+  <tr>
+    <td>Andrea Gutiérrez</td>
+    <td>Dueño</td>
+    <td class="estado">Inactivo</td>
+    <td>
+      <button class="btn-estado">Activar</button>
+      <button class="btn-rol">Asignar Rol</button>
+    </td>
+  </tr>
+  <tr>
+    <td>Manuel Paredes</td>
+    <td>Recepcionista</td>
+    <td class="estado">Activo</td>
+    <td>
+      <button class="btn-estado">Desactivar</button>
+      <button class="btn-rol">Asignar Rol</button>
+    </td>
+  </tr>
+  <tr>
+    <td>Vanessa León</td>
+    <td>Turista</td>
+    <td class="estado">Activo</td>
+    <td>
+      <button class="btn-estado">Desactivar</button>
+      <button class="btn-rol">Asignar Rol</button>
+    </td>
+  </tr>
+  <tr>
+    <td>Enrique Chávez</td>
+    <td>Administrador</td>
+    <td class="estado">Inactivo</td>
+    <td>
+      <button class="btn-estado">Activar</button>
+      <button class="btn-rol">Asignar Rol</button>
+    </td>
+  </tr>
+  <tr>
+    <td>Rosa Cárdenas</td>
+    <td>Recepcionista</td>
+    <td class="estado">Activo</td>
+    <td>
+      <button class="btn-estado">Desactivar</button>
+      <button class="btn-rol">Asignar Rol</button>
+    </td>
+  </tr>
+  <tr>
+    <td>Julio Torres</td>
+    <td>Dueño</td>
+    <td class="estado">Inactivo</td>
+    <td>
+      <button class="btn-estado">Activar</button>
+      <button class="btn-rol">Asignar Rol</button>
+    </td>
+  </tr>
+  <tr>
+    <td>Daniela Rivas</td>
+    <td>Turista</td>
+    <td class="estado">Activo</td>
+    <td>
+      <button class="btn-estado">Desactivar</button>
+      <button class="btn-rol">Asignar Rol</button>
+    </td>
+  </tr>
+  <tr>
+    <td>Héctor Morales</td>
+    <td>Administrador</td>
+    <td class="estado">Inactivo</td>
+    <td>
+      <button class="btn-estado">Activar</button>
+      <button class="btn-rol">Asignar Rol</button>
+    </td>
+  </tr>
+  <tr>
+    <td>Karen Salas</td>
+    <td>Recepcionista</td>
+    <td class="estado">Activo</td>
+    <td>
+      <button class="btn-estado">Desactivar</button>
+      <button class="btn-rol">Asignar Rol</button>
+    </td>
+  </tr>
+  <tr>
+    <td>Álvaro López</td>
+    <td>Dueño</td>
+    <td class="estado">Activo</td>
+    <td>
+      <button class="btn-estado">Desactivar</button>
+      <button class="btn-rol">Asignar Rol</button>
+    </td>
+  </tr>
+  <tr>
+    <td>Lucero Ramos</td>
+    <td>Turista</td>
+    <td class="estado">Inactivo</td>
+    <td>
+      <button class="btn-estado">Activar</button>
+      <button class="btn-rol">Asignar Rol</button>
+    </td>
+  </tr>
+  <tr>
+    <td>Marco Espinoza</td>
+    <td>Administrador</td>
+    <td class="estado">Activo</td>
+    <td>
+      <button class="btn-estado">Desactivar</button>
+      <button class="btn-rol">Asignar Rol</button>
+    </td>
+  </tr>
+  <tr>
+    <td>Angela Vargas</td>
+    <td>Recepcionista</td>
+    <td class="estado">Activo</td>
+    <td>
+      <button class="btn-estado">Desactivar</button>
+      <button class="btn-rol">Asignar Rol</button>
+    </td>
+  </tr>
       </tbody>
     </table>
   </main>
 
+  <!-- ===== MODAL PARA ASIGNAR ROL ===== -->
+  <div id="modalRol" class="modal">
+    <div class="modal-contenido">
+      <h3>Asignar Rol</h3>
+      <p id="nombreUsuario"></p>
+      <select id="nuevoRol">
+        <option value="Turista">Turista</option>
+        <option value="Recepcionista">Recepcionista</option>
+        <option value="Dueño">Dueño</option>
+        <option value="Administrador">Administrador</option>
+      </select>
+      <div class="botones-modal">
+        <button id="guardarRol">Guardar</button>
+        <button id="cancelarRol">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     lucide.createIcons();
+
+    const input = document.getElementById("buscarInput");
+    const boton = document.getElementById("btnBuscar");
+    const filas = document.querySelectorAll("#tablaUsuarios tbody tr");
+    const modal = document.getElementById("modalRol");
+    const nombreUsuario = document.getElementById("nombreUsuario");
+    const nuevoRol = document.getElementById("nuevoRol");
+    let filaSeleccionada = null;
+
+    // Normalizar texto (para búsqueda)
+    function normalizarTexto(texto) {
+      return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    }
+
+    function filtrarUsuarios() {
+      const texto = normalizarTexto(input.value);
+      filas.forEach(fila => {
+        const nombre = normalizarTexto(fila.cells[0].textContent);
+        const rol = normalizarTexto(fila.cells[1].textContent);
+        if (nombre.includes(texto) || rol.includes(texto)) {
+          fila.style.display = "";
+        } else {
+          fila.style.display = "none";
+        }
+      });
+    }
+
+    boton.addEventListener("click", filtrarUsuarios);
+    input.addEventListener("keyup", filtrarUsuarios);
+
+    // ===== ACTIVAR / DESACTIVAR =====
+    document.querySelectorAll(".btn-estado").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const fila = btn.closest("tr");
+        const estadoCelda = fila.querySelector(".estado");
+
+        if (estadoCelda.textContent === "Activo") {
+          estadoCelda.textContent = "Inactivo";
+          estadoCelda.style.color = "#b02a37";
+          btn.textContent = "Activar";
+        } else {
+          estadoCelda.textContent = "Activo";
+          estadoCelda.style.color = "#155724";
+          btn.textContent = "Desactivar";
+        }
+      });
+    });
+
+    // ===== ASIGNAR ROL =====
+    document.querySelectorAll(".btn-rol").forEach(btn => {
+      btn.addEventListener("click", () => {
+        filaSeleccionada = btn.closest("tr");
+        nombreUsuario.textContent = filaSeleccionada.cells[0].textContent;
+        modal.style.display = "flex";
+      });
+    });
+
+    document.getElementById("cancelarRol").addEventListener("click", () => {
+      modal.style.display = "none";
+    });
+
+    document.getElementById("guardarRol").addEventListener("click", () => {
+      if (filaSeleccionada) {
+        filaSeleccionada.cells[1].textContent = nuevoRol.value;
+      }
+      modal.style.display = "none";
+    });
+
+    // Cerrar modal haciendo clic fuera del contenido
+    window.addEventListener("click", (e) => {
+      if (e.target === modal) {
+        modal.style.display = "none";
+      }
+    });
   </script>
 
 </body>

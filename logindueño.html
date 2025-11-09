@@ -1,38 +1,66 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login | EcoHospedajes Rurales</title>
-    <link rel="stylesheet" href="/Css/Login.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Iniciar Sesión | EcoHospedajes Rurales</title>
+  <link rel="stylesheet" href="/Css/login.css">
 </head>
 <body>
-    <div class="login-container">
-        <div class="login-box">
-            <div class="logo">
-                <img src="/img/logo.jpg" alt="Logo "> 
-                <h2>EcoHospedajes Rurales</h2>
-                <p>Reservas en hospedajes rurales de Perú</p>
-            </div>
 
-            <h1>Login</h1>
-            
-            <form>
-                <label for="usuario">Usuario</label>
-                <input type="text" id="usuario" placeholder="Ingresa tu usuario">
+  <div class="login-container">
+    <div class="login-box">
+      <div class="logo">
+        <img src="/img/logo.jpg" alt="Logo">
+        <h2>EcoHospedajes Rurales</h2>
+      </div>
 
-                <label for="contrasena">Contraseña</label>
-                <input type="password" id="contrasena" placeholder="Ingresa tu contraseña">
+      <h1>Inicia sesión</h1>
 
-                <label for="">Dni</label>
-                <input type="dni" id="dni" placeholder="Ingresa tu dni">
+      <form id="loginForm">
+        <input type="email" id="email" placeholder="Correo electrónico" required>
+        <input type="password" id="contrasena" placeholder="Contraseña" required>
+        <button type="submit">Entrar</button>
+      </form>
 
-            </form>
-                <a href="/dueño/index.html"><button type="submit">Ingresar</button></a>
+      <p class="switch-text">
+        ¿No tienes una cuenta?
+        <a href="/registrate.html">Regístrate aquí</a>
+      </p>
+    </div>
+  </div>
 
-            <a href="/registrate.html" class="forgot">¿Aún no te has registrado? </a>
-            
-        </div>
-    </div> 
+<script>
+document.getElementById("loginForm").addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const email = document.getElementById("email").value;
+  const contrasena = document.getElementById("contrasena").value;
+
+  try {
+    const response = await fetch("http://localhost:8080/api/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, contrasena }),
+    });
+
+    const data = await response.json();
+
+    if (response.ok && !data.mensaje) {
+      localStorage.setItem("usuarioLogueado", JSON.stringify(data));
+
+      window.location.href = "/logeado/index.html";
+    } else {
+      alert(data.mensaje || "Error al iniciar sesión");
+    }
+  } catch (error) {
+    console.error("Error al iniciar sesión:", error);
+    alert("Error al conectar con el servidor");
+  }
+});
+</script>
+
+
+
 </body>
 </html>

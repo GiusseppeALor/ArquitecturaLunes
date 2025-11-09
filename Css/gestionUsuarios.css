@@ -149,3 +149,99 @@ tr:nth-child(even) {
 tr:hover {
   background-color: #e8f2ec;
 }
+
+/* ===== BOTONES DE ACCIONES ===== */
+td button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+td button:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+.btn-estado {
+  background-color: #198754; /* Verde */
+  color: white;
+  margin-right: 5px;
+}
+
+.btn-rol {
+  background-color: #0d6efd; /* Azul */
+  color: white;
+}
+
+/* ===== ESTADO COLOR ===== */
+.estado {
+  font-weight: 600;
+  color: #155724;
+}
+
+/* ===== MODAL ASIGNAR ROL ===== */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-contenido {
+  background-color: var(--color-blanco);
+  padding: 25px;
+  border-radius: 12px;
+  width: 300px;
+  text-align: center;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.modal-contenido h3 {
+  color: var(--color-primario);
+  margin-bottom: 10px;
+}
+
+.modal-contenido p {
+  font-weight: 500;
+  color: var(--color-texto);
+  margin-bottom: 15px;
+}
+
+.modal select {
+  width: 100%;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid var(--color-borde);
+  font-size: 14px;
+}
+
+.botones-modal {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.botones-modal button {
+  width: 45%;
+  padding: 8px 0;
+  border-radius: 6px;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+#guardarRol {
+  background-color: var(--color-primario);
+}
+
+#cancelarRol {
+  background-color: #dc3545;
+}
+

@@ -5,81 +5,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dashboard - EcoHospedajes Rurales</title>
     <link rel="stylesheet" href="/Css/dashboard.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </head>
 
   <body>
-  <header class="navbar">
-    <div class="logo">
-      <img src="/img/logo.jpg" alt="Logo" class="icono">
-      <div>
-        <h1>EcoHospedajes Rurales</h1>
-        <p>Reservas en hospedajes rurales de Perú</p>
+    <header class="navbar">
+      <div class="logo">
+        <img src="/img/logo.jpg" alt="Logo" class="icono" />
+        <div>
+          <h1>EcoHospedajes Rurales</h1>
+          <p>Reservas en hospedajes rurales de Perú</p>
+        </div>
       </div>
-    </div>
-    <nav>
-      <a href="/dueño/index.html">Inicio</a>
-      <a href="/dueño/gestion.html">Gestion</a>
-      <a href="/dueño/dashboard.html">Dashboard</a>
-      <a href="/index.html" class="forgot"> Cerrar sesión </a>
-    </nav>
-  </header>
+      <nav>
+        <a href="/dueño/index.html">Inicio</a>
+        <a href="/dueño/gestion.html">Gestión</a>
+        <a href="/dueño/dashboard.html">Dashboard</a>
+        <a href="/index.html" class="forgot">Cerrar sesión</a>
+      </nav>
+    </header>
 
     <main>
+      <h2 style="text-align:center; color: var(--color-primario); font-size: 28px;">Dashboard General</h2>
+      <p style="text-align:center; color:#555; margin-bottom:40px;">Resumen de la actividad de hospedajes rurales</p>
+
       <div class="dashboard-grid">
+        <!-- Reservas mensuales -->
         <div class="dashboard-card">
           <h3>Reservas mensuales</h3>
-          <div class="chart-placeholder">
-            <div class="y-axis">
-              <span>10</span>
-              <span>8</span>
-              <span>6</span>
-              <span>4</span>
-              <span>0</span>
-            </div>
-
-            <div class="bar-chart">
-              <div class="bar" style="height: 60%"><span>Ago</span></div>
-              <div class="bar" style="height: 75%"><span>Sep</span></div>
-              <div class="bar" style="height: 80%"><span>Oct</span></div>
-              <div class="bar" style="height: 95%"><span>Nov</span></div>
-              <div class="bar" style="height: 70%"><span>Dic</span></div>
-            </div>
-          </div>
+          <canvas id="reservasChart"></canvas>
         </div>
 
+        <!-- Ocupación -->
         <div class="dashboard-card">
-          <h3>Estado de ocupación de habitaciones</h3>
-          <div class="chart-placeholder gauge-chart">
-            <div class="gauge-body">
-              <div class="gauge-fill"></div>
-              <div class="gauge-cover">75%</div>
-            </div>
-          </div>
+          <h3>Estado de ocupación</h3>
+          <canvas id="ocupacionChart"></canvas>
         </div>
 
+        <!-- Ingresos recientes -->
         <div class="dashboard-card">
-          <h3>Ingresos recientes</h3>
-          <div class="chart-placeholder">
-            <div class="y-axis">
-              <span>$4,000</span>
-              <span>$3,000</span>
-              <span>$2,000</span>
-              <span>$0</span>
-            </div>
-
-            <div class="bar-chart">
-              <div class="bar" style="height: 40%"><span>Sep</span></div>
-              <div class="bar" style="height: 50%"><span>Oct</span></div>
-              <div class="bar" style="height: 70%"><span>Nov</span></div>
-              <div class="bar" style="height: 85%"><span>Dic</span></div>
-            </div>
-          </div>
+          <h3>Ingresos recientes (S/)</h3>
+          <canvas id="ingresosChart"></canvas>
         </div>
 
+        <!-- Huéspedes -->
         <div class="dashboard-card">
           <h3>Huéspedes este mes</h3>
+          <canvas id="huéspedesChart"></canvas>
           <div class="chart-placeholder metric-placeholder">
-            <span class="metric-number">128</span>
+            <span class="metric-number" id="huéspedesTotal">0</span>
           </div>
         </div>
       </div>
@@ -88,10 +62,8 @@
     <footer class="site-footer">
       <div class="footer-content">
         <div class="footer-logo">
-          <div>
-            <h4>EcoHospedajes Rurales</h4>
-            <p>Reservas en hospedajes rurales de Perú</p>
-          </div>
+          <h4>EcoHospedajes Rurales</h4>
+          <p>Reservas en hospedajes rurales de Perú</p>
         </div>
         <div class="footer-links">
           <div class="contenido-medio">
@@ -117,5 +89,113 @@
         <p>&copy; 2025 EcoHospedajes Rurales. Todos los derechos reservados.</p>
       </div>
     </footer>
+
+    <!-- =============== SCRIPT =============== -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        // ====== Reservas Mensuales ======
+        new Chart(document.getElementById("reservasChart"), {
+          type: "bar",
+          data: {
+            labels: ["Ene", "Feb", "Mar", "Abr", "May", "Jun"],
+            datasets: [
+              {
+                label: "Reservas",
+                data: [12, 18, 9, 15, 20, 25],
+                backgroundColor: "#2f624d",
+                borderRadius: 6,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            animation: { duration: 1500 },
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true }, x: { ticks: { color: "#555" } } },
+          },
+        });
+
+        // ====== Ocupación ======
+        new Chart(document.getElementById("ocupacionChart"), {
+          type: "doughnut",
+          data: {
+            labels: ["Ocupadas", "Disponibles"],
+            datasets: [
+              { data: [70, 30], backgroundColor: ["#2f624d", "#a3d9b1"] },
+            ],
+          },
+          options: {
+            responsive: true,
+            animation: { animateRotate: true, duration: 1500 },
+            plugins: { legend: { position: "bottom" } },
+          },
+        });
+
+        // ====== Ingresos dinámicos ======
+        const ingresosCtx = document.getElementById("ingresosChart").getContext("2d");
+        const ingresosData = {
+          labels: ["Ene", "Feb", "Mar", "Abr", "May", "Jun"],
+          datasets: [
+            {
+              label: "Ingresos",
+              data: [800, 1000, 1200, 900, 1500, 1700],
+              borderColor: "#2f624d",
+              backgroundColor: "#a3d9b1",
+              tension: 0.3,
+              fill: true,
+            },
+          ],
+        };
+        const ingresosChart = new Chart(ingresosCtx, {
+          type: "line",
+          data: ingresosData,
+          options: {
+            responsive: true,
+            animation: { duration: 1000, easing: "easeOutQuart" },
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true }, x: { ticks: { color: "#555" } } },
+          },
+        });
+
+        // Simulación dinámica de ingresos
+        setInterval(() => {
+          ingresosData.datasets[0].data.shift();
+          ingresosData.datasets[0].data.push(Math.floor(800 + Math.random() * 1000));
+          ingresosChart.update();
+        }, 4000);
+
+        // ====== Huéspedes dinámicos ======
+        const huespedesCtx = document.getElementById("huéspedesChart").getContext("2d");
+        let huespedes = 148;
+        const huespedesChart = new Chart(huespedesCtx, {
+          type: "doughnut",
+          data: {
+            labels: ["Huéspedes", "Meta"],
+            datasets: [
+              {
+                data: [huespedes, 200 - huespedes],
+                backgroundColor: ["#2f624d", "#d8e9e3"],
+                cutout: "75%",
+              },
+            ],
+          },
+          options: {
+            plugins: { legend: { display: false } },
+            animation: { animateRotate: true, duration: 1500 },
+          },
+        });
+
+        // Actualización automática del número
+        const numero = document.getElementById("huéspedesTotal");
+        numero.textContent = huespedes;
+
+        setInterval(() => {
+          const nuevo = Math.floor(120 + Math.random() * 80);
+          huespedesChart.data.datasets[0].data = [nuevo, 200 - nuevo];
+          huespedesChart.update();
+          numero.textContent = nuevo;
+        }, 4000);
+      });
+    </script>
   </body>
 </html>

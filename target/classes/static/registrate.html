@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro | EcoHospedajes Rurales</title>
+    <link rel="stylesheet" href="/Css/Registrate.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-box">
+            <div class="logo">
+                <img src="/img/logo.jpg" alt="Logo ">
+                <h2>EcoHospedajes Rurales</h2>
+            </div>
+
+            <h1>Regístrate en nuestra plataforma</h1>
+
+            <form id="registroForm">
+                <input type="text" name="usuario" placeholder="Nombre de usuario" required>
+                <input type="text" name="nombre" placeholder="Nombre completo" required>
+                <input type="email" name="correo" placeholder="Correo electrónico" required>
+                <input type="password" name="contrasena" placeholder="Contraseña" required>
+                <button type="submit">Registrarse</button>
+            </form>
+
+            <p class="switch-text">¿Ya tienes una cuenta? 
+                <a href="/login.html">Inicia sesión</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("registroForm").addEventListener("submit", async function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+            const params = new URLSearchParams(formData);
+
+            const response = await fetch("http://localhost:8080/api/registro", {
+                method: "POST",
+                body: params
+            });
+
+            const result = await response.text();
+
+            if (result === "OK") {
+                alert("✅ Registro exitoso");
+                window.location.href = "/login.html";
+            } else if (result === "EXISTE") {
+                alert("⚠️ El usuario ya existe");
+            } else {
+                alert("❌ Error al registrar usuario");
+            }
+        });
+    </script>
+</body>
+</html>
+
