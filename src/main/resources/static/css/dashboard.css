@@ -1,0 +1,113 @@
+/* --- ESTILOS GENERALES Y DE MARCA --- */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+  /* Fondo verde salvia de tu marca */
+  background-color: #f4f4f4; /* Un fondo gris claro es mejor para un dashboard */
+  margin: 0;
+  min-height: 100vh;
+}
+
+/* --- ESTILO DEL NAVBAR (Header) --- */
+.navbar {
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  padding: 10px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.navbar .logo {
+  display: flex;
+  align-items: center;
+}
+.navbar .icono {
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+}
+.navbar .logo h1 {
+  font-size: 1.2rem;
+  margin: 0;
+  color: #333;
+}
+.navbar .logo p {
+  font-size: 0.8rem;
+  margin: 0;
+  color: #666;
+}
+.navbar nav a {
+  text-decoration: none;
+  color: #555;
+  margin-left: 20px;
+  font-weight: 500;
+}
+.navbar nav a.btn-cerrar {
+  background-color: #333;
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+/* --- CONTENIDO PRINCIPAL --- */
+main {
+  max-width: 1200px;
+  width: 100%;
+  margin: 40px auto; /* Centrado */
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
+/* --- GRID DEL DASHBOARD --- */
+.dashboard-grid {
+  display: grid;
+  /* 2 columnas de tamaño igual */
+  grid-template-columns: 1fr 1fr;
+  gap: 24px; /* Espacio entre las tarjetas */
+}
+
+/* Tarjeta individual */
+.dashboard-card {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  padding: 24px;
+}
+
+.dashboard-card h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+/* Contenedor de la gráfica (para que el canvas quepa) */
+.chart-container {
+  position: relative;
+  height: 250px; /* Altura de la gráfica */
+}
+
+/* --- TARJETAS ESTÁTICAS (Ocupación y Huéspedes) --- */
+/* Estilos para las tarjetas de demo que no son dinámicas */
+
+.gauge-chart {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 250px;
+  font-size: 3rem;
+  font-weight: 700;
+  color: #333;
+  /* Esto es solo un placeholder, la gráfica de semicírculo es más compleja */
+}
+.metric-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 250px;
+  font-size: 4rem;
+  font-weight: 700;
+  color: #8faba0; /* Verde de tu marca */
+}

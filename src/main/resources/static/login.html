@@ -1,57 +1,42 @@
 <!DOCTYPE html>
 <html lang="es">
   <head>
-     
     <meta charset="UTF-8" />
-    C
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-     
     <title>Iniciar Sesión | EcoHospedajes Rurales</title>
-     
     <link rel="stylesheet" href="/Css/login.css" />
   </head>
   <body>
-     
     <div class="login-container">
-         
       <div class="login-box">
-             
         <div class="logo">
-                  <img src="/img/logo.jpg" alt="Logo" />        
+          <img src="/img/logo.jpg" alt="Logo" />
           <h2>EcoHospedajes Rurales</h2>
-               
         </div>
 
-             
         <h1>Inicia sesión</h1>
 
-             
         <form id="loginForm">
-                 
           <input
             type="email"
             id="email"
             placeholder="Correo electrónico"
             required
           />
-                 
           <input
             type="password"
             id="contrasena"
             placeholder="Contraseña"
             required
           />
-                  <button type="submit">Entrar</button>      
+          <button type="submit">Entrar</button>
         </form>
 
-             
         <p class="switch-text">
-                  ¿No tienes una cuenta?        
-          <a href="/registrate.html">Regístrate aquí</a>      
+          ¿No tienes una cuenta?
+          <a href="/registrate.html">Regístrate aquí</a>
         </p>
-           
       </div>
-       
     </div>
 
     <script>
@@ -73,13 +58,16 @@
             const data = await response.json();
 
             if (response.ok && !data.mensaje) {
-              // Tu línea original para guardar el objeto completo
+              // Guardamos el objeto completo
               localStorage.setItem("usuarioLogueado", JSON.stringify(data));
 
-              // --- LÍNEA AÑADIDA PARA QUE 'perfil.html' FUNCIONE ---
-              // 'data' es el objeto usuario: {id: 5, nombre: ...}
+              // Guardamos el ID para 'perfil.html'
               localStorage.setItem("usuarioId", data.id);
-              // ----------------------------------------------------
+
+              // --- ¡CAMBIO IMPORTANTE AÑADIDO! ---
+              // Guardamos el Rol para el Dashboard
+              localStorage.setItem("usuarioRol", data.rol);
+              // ------------------------------------
 
               window.location.href = "/logeado/index.html";
             } else {

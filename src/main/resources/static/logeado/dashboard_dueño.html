@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard - EcoHospedajes Rurales</title>
+    <link rel="stylesheet" href="/css/dashboard.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+
+  <body>
+    <header class="navbar">
+      <div class="logo">
+        <img src="/img/logo.jpg" alt="Logo" class="icono" />
+        <div>
+          <h1>EcoHospedajes Rurales</h1>
+          <p>Reservas en hospedajes rurales de Perú</p>
+        </div>
+      </div>
+      <nav>
+        <a href="../logeado/catalogo.html">Catálogo</a>
+        <a href="../logeado/historial.html">Mis reservas</a>
+        <a href="/" class="forgot" id="btn-cerrar-sesion"> Cerrar sesión </a>
+      </nav>
+    </header>
+
+    <main>
+      <div class="dashboard-grid">
+        <div class="dashboard-card">
+          <h3>Resumén de reservas recibidas</h3>
+          <div class="chart-container">
+            <canvas id="reservasChart"></canvas>
+          </div>
+        </div>
+
+        <div class="dashboard-card">
+          <h3>Estado de ocupación de habitaciones</h3>
+          <div class="gauge-chart">0%</div>
+        </div>
+
+        <div class="dashboard-card">
+          <h3>Ingresos recientes</h3>
+          <div class="chart-container">
+            <canvas id="ingresosChart"></canvas>
+          </div>
+        </div>
+
+        <div class="dashboard-card">
+          <h3>Huéspedes este mes</h3>
+          <div class="metric-number">0</div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="site-footer"></footer>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        // --- 1. OBTENER ID DE USUARIO (Propietario) ---
+        const propietarioId = localStorage.getItem("usuarioId");
+        const btnCerrarSesion = document.getElementById("btn-cerrar-sesion");
+
+        // --- 2. GESTIONAR CIERRE DE SESIÓN ---
+        btnCerrarSesion.addEventListener("click", (e) => {
+          e.preventDefault();
+          localStorage.removeItem("usuarioId");
+          localStorage.removeItem("usuarioLogueado");
+          // --- ¡CAMBIO AQUÍ! Faltaba borrar el rol ---
+          localStorage.removeItem("usuarioRol");
+
+          // --- ¡CAMBIO IMPORTANTE! ---
+          // Redirigimos a la URL raíz (/), no al archivo.
+          window.location.href = "/";
+        });
+
+        // --- 3. VERIFICAR LOGIN ---
+        if (!propietarioId) {
+          alert("Error: No has iniciado sesión como propietario.");
+          window.location.href = "/login.html";
+          return;
+        }
+
+        // --- 4. REFERENCIAS A LOS LIENZOS (CANVAS) ---
+        const ctxReservas = document
+          .getElementById("reservasChart")
+          .getContext("2d");
+        const ctxIngresos = document
+          .getElementById("ingresosChart")
+          .getContext("2d");
+
+        // --- 5. FUNCIÓN PARA PINTAR LAS GRÁFICAS ---
+        async function cargarDashboard() {
+          try {
+            // Llamamos al nuevo endpoint del backend
+            const response = await fetch(`/api/dashboard/${propietarioId}`);
+            if (!response.ok) {
+              throw new Error("No se pudieron cargar los datos del dashboard.");
+            }
+            const data = await response.json();
+
+            // --- Procesar datos para Gráfica 1: Reservas por Mes ---
+            const reservasLabels = data.reservasPorMes.map(
+              (item) => item.label
+            );
+            const reservasValores = data.reservasPorMes.map(
+              (item) => item.valor
+            );
+
+            new Chart(ctxReservas, {
+              type: "bar",
+              data: {
+                labels: reservasLabels,
+                datasets: [
+                  {
+                    label: "N° de Reservas",
+                    data: reservasValores,
+                    backgroundColor: "#8faba0", // Verde de tu marca
+                    borderRadius: 4,
+                  },
+                ],
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: { y: { beginAtZero: true } },
+              },
+            });
+
+            // --- Procesar datos para Gráfica 2: Ingresos por Mes ---
+            const ingresosLabels = data.ingresosPorMes.map(
+              (item) => item.label
+            );
+            const ingresosValores = data.ingresosPorMes.map(
+              (item) => item.valor
+            );
+
+            new Chart(ctxIngresos, {
+              type: "bar",
+              data: {
+                labels: ingresosLabels,
+                datasets: [
+                  {
+                    label: "Ingresos (S/)",
+                    data: ingresosValores,
+                    backgroundColor: "#333", // Color oscuro
+                    borderRadius: 4,
+                  },
+                ],
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: { y: { beginAtZero: true } },
+              },
+            });
+          } catch (error) {
+            console.error(error);
+            alert(error.message);
+          }
+        }
+
+        // --- 6. EJECUTAR LA FUNCIÓN AL CARGAR LA PÁGINA ---
+        cargarDashboard();
+      });
+    </script>
+  </body>
+</html>
