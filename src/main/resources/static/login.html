@@ -36,48 +36,51 @@
           ¿No tienes una cuenta?
           <a href="/registrate.html">Regístrate aquí</a>
         </p>
+
+        <p class="switch-text">
+          Registrate como dueño
+          <a href="/registrar-dueño.html">Regístrate aquí</a>
+        </p>
       </div>
     </div>
 
     <script>
-      document
-        .getElementById("loginForm")
-        .addEventListener("submit", async (event) => {
-          event.preventDefault();
+document.getElementById("loginForm").addEventListener("submit", async (event) => {
+  event.preventDefault();
 
-          const email = document.getElementById("email").value;
-          const contrasena = document.getElementById("contrasena").value;
+  const email = document.getElementById("email").value;
+  const contrasena = document.getElementById("contrasena").value;
 
-          try {
-            const response = await fetch("http://localhost:8080/api/login", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ email, contrasena }),
-            });
+  try {
+    const response = await fetch("http://localhost:8080/api/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, contrasena }),
+    });
 
-            const data = await response.json();
+    const data = await response.json();
 
-            if (response.ok && !data.mensaje) {
-              // Guardamos el objeto completo
-              localStorage.setItem("usuarioLogueado", JSON.stringify(data));
+    if (response.ok && !data.mensaje) {
+      localStorage.setItem("usuarioLogueado", JSON.stringify(data));
+      localStorage.setItem("usuarioId", data.id);
+      localStorage.setItem("usuarioRol", data.rol);
 
-              // Guardamos el ID para 'perfil.html'
-              localStorage.setItem("usuarioId", data.id);
+      // Redirección según el rol
+      if (data.rol === "DUEÑO") {
+        window.location.href = "/dueño/gestionUsuarios.html";
+      } else {
+        window.location.href = "/logeado/index.html";
+      }
 
-              // --- ¡CAMBIO IMPORTANTE AÑADIDO! ---
-              // Guardamos el Rol para el Dashboard
-              localStorage.setItem("usuarioRol", data.rol);
-              // ------------------------------------
+    } else {
+      alert(data.mensaje || "Error al iniciar sesión");
+    }
+  } catch (error) {
+    console.error("Error al iniciar sesión:", error);
+    alert("Error al conectar con el servidor");
+  }
+});
+</script>
 
-              window.location.href = "/logeado/index.html";
-            } else {
-              alert(data.mensaje || "Error al iniciar sesión");
-            }
-          } catch (error) {
-            console.error("Error al iniciar sesión:", error);
-            alert("Error al conectar con el servidor");
-          }
-        });
-    </script>
   </body>
 </html>

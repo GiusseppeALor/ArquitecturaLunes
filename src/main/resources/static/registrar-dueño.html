@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Registro Dueño | EcoHospedajes Rurales</title>
+  <link rel="stylesheet" href="/Css/Registrate.css" />
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-box">
+      <div class="logo">
+        <img src="/img/logo.jpg" alt="Logo" />
+        <h2>EcoHospedajes Rurales</h2>
+      </div>
+
+      <h1>Registro de Dueño</h1>
+
+      <form id="formDueno">
+        <input type="text" id="nombre" placeholder="Nombre" required />
+        <input type="text" id="apellidos" placeholder="Apellidos" required />
+        <input type="email" id="email" placeholder="Correo electrónico" required />
+        <input type="password" id="contrasena" placeholder="Contraseña" required />
+        <button type="submit">Registrarse</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("formDueno").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const usuario = {
+        nombre: document.getElementById("nombre").value,
+        apellidos: document.getElementById("apellidos").value,
+        email: document.getElementById("email").value,
+        contrasena: document.getElementById("contrasena").value
+      };
+
+      const res = await fetch("http://localhost:8080/api/usuarios/dueno", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(usuario),
+      });
+
+      if (res.ok) {
+        alert("Dueño registrado correctamente ✅");
+        window.location.href = "/login.html";
+      } else {
+        alert("Error al registrar el dueño ❌");
+      }
+    });
+  </script>
+</body>
+</html>

@@ -30,6 +30,12 @@ public class UsuarioController {
         return usuarioRepository.save(usuario);
     }
 
+    
+    @PostMapping("/dueno")
+    public Usuario registrarDueno(@RequestBody Usuario usuario) {
+        usuario.setRol("DUEÑO");
+        return usuarioRepository.save(usuario);
+    }
     @GetMapping
     public Iterable<Usuario> listarUsuarios() {
         return usuarioRepository.findAll();
