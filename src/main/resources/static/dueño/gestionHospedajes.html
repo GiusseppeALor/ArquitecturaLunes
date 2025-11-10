@@ -1,84 +1,170 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gestión de hospedajes - EcoHospedajes Rurales</title>
-  <link rel="stylesheet" href="/Css/gestionHospedajes.css">
-  <script src="https://unpkg.com/lucide@latest"></script> <!-- Iconos -->
+  <title>Gestión de Hospedajes | Panel del Dueño</title>
+  <link rel="stylesheet" href="/Css/GestionHospedaje.css">
 </head>
-
 <body>
+  <header class="navbar">
+    <div class="navbar-container">
+      <div class="logo">
+        <img src="/img/logo.jpg" alt="Logo" class="icono">
+        <div>
+          <h1>EcoHospedajes Rurales</h1>
+          <p>Panel del Dueño</p>
+        </div>
+      </div>
 
-  <!-- ===== BARRA LATERAL ===== -->
-  <aside class="sidebar">
-    <h2>EcoHospedajes</h2>
-    <nav>
-      <a href="/dueño/dashboard.html"><i data-lucide="home"></i> Dashboard</a>
-      <a href="/dueño/gestionUsuarios.html"><i data-lucide="user"></i> Usuarios</a>
-      <a href="/dueño/gestionHospedajes.html" class="active"><i data-lucide="hotel"></i> Hospedajes</a>
-      <a href="/dueño/gestionReservas.html"><i data-lucide="calendar"></i> Reservas</a>
-    </nav>
-  </aside>
+      <nav class="nav-links">
+        <a href="/dueño/RegistrarHospedaje.html">Registrar Hospedaje</a>
+        <a href="/dueño/GestionHospedajes.html" class="activo">Gestión</a>
+        <a href="/dueño/GestionReservas.html" class="activo">Gestión de Reservas</a>
+        <a href="#" id="cerrarSesion">Cerrar Sesión</a>
+      </nav>
+    </div>
+  </header>
 
-  <!-- ===== CONTENIDO PRINCIPAL ===== -->
-  <main class="main-content">
-    <h1>Gestión de hospedajes</h1>
-
-    <section class="buscador">
-      <input type="text" placeholder="Buscar hospedaje...">
-      <button>Buscar</button>
-    </section>
-
-    <table>
+  <main class="gestion-container">
+    <h2>Mis Hospedajes</h2>
+    <table id="tablaHospedajes">
       <thead>
         <tr>
+          <th>Imagen</th>
           <th>Nombre</th>
           <th>Ubicación</th>
-          <th>Precio</th>
-          <th>Estado</th>
+          <th>Precio (S/.)</th>
+          <th>Acciones</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>Cabaña del sol</td>
-          <td>Trujillo</td>
-          <td>S/120</td>
-          <td>Activo</td>
-        </tr>
-        <tr>
-          <td>Finca la soledad</td>
-          <td>Ancash</td>
-          <td>S/100</td>
-          <td>Activo</td>
-        </tr>
-        <tr>
-          <td>Hospedaje luna</td>
-          <td>Lima</td>
-          <td>S/250</td>
-          <td>Activo</td>
-        </tr>
-        <tr>
-          <td>Refugio andino</td>
-          <td>Cusco</td>
-          <td>S/200</td>
-          <td>Activo</td>
-        </tr>
-        <tr>
-          <td>El rancho</td>
-          <td>Puno</td>
-          <td>S/150</td>
-          <td>Activo</td>
-        </tr>
+        <!-- Los hospedajes se insertarán aquí dinámicamente -->
       </tbody>
     </table>
+    <p id="mensaje" class="mensaje"></p>
   </main>
 
-  <script>
-    lucide.createIcons(); // Cargar íconos
-  </script>
-  
+  <!-- Modal para editar -->
+  <div id="modalEditar" class="modal">
+    <div class="modal-content">
+      <h3>Editar Hospedaje</h3>
+      <form id="formEditar">
+        <input type="hidden" id="editarId">
+        <label>Nombre:</label>
+        <input type="text" id="editarNombre" required>
+        <label>Ubicación:</label>
+        <input type="text" id="editarUbicacion" required>
+        <label>Precio:</label>
+        <input type="number" id="editarPrecio" step="0.01" required>
+        <label>Imagen URL:</label>
+        <input type="text" id="editarImagenUrl" required>
+        <label>Descripción:</label>
+        <textarea id="editarDescripcion" rows="3" required></textarea>
+        <button type="submit">Guardar Cambios</button>
+        <button type="button" id="cancelarEditar" class="cancelar">Cancelar</button>
+      </form>
+    </div>
+  </div>
 
+  <script>
+    const tablaBody = document.querySelector("#tablaHospedajes tbody");
+    const mensaje = document.getElementById("mensaje");
+
+    async function cargarHospedajes() {
+      try {
+        const res = await fetch("http://localhost:8080/api/hospedajes");
+        const hospedajes = await res.json();
+
+        tablaBody.innerHTML = "";
+        hospedajes.forEach(h => {
+          const fila = document.createElement("tr");
+          fila.innerHTML = `
+            <td><img src="${h.imagenUrl}" alt="${h.nombre}" class="miniatura"></td>
+            <td>${h.nombre}</td>
+            <td>${h.ubicacion}</td>
+            <td>${h.precio.toFixed(2)}</td>
+            <td>
+              <button class="editar" onclick="abrirModal(${h.id}, '${h.nombre}', '${h.ubicacion}', ${h.precio}, '${h.imagenUrl}', \`${h.descripcion}\`)">✏️</button>
+              <button class="eliminar" onclick="eliminarHospedaje(${h.id})">🗑️</button>
+            </td>
+          `;
+          tablaBody.appendChild(fila);
+        });
+
+      } catch (error) {
+        console.error("Error al cargar hospedajes:", error);
+        mensaje.textContent = "❌ Error al conectar con el servidor.";
+      }
+    }
+
+    async function eliminarHospedaje(id) {
+      if (!confirm("¿Seguro que quieres eliminar este hospedaje?")) return;
+
+      try {
+        const res = await fetch(`http://localhost:8080/api/hospedajes/${id}`, { method: "DELETE" });
+        if (res.ok) {
+          alert("Hospedaje eliminado con éxito.");
+          cargarHospedajes();
+        } else {
+          alert("Error al eliminar hospedaje.");
+        }
+      } catch (error) {
+        console.error(error);
+        alert("Error al conectar con el servidor.");
+      }
+    }
+
+    function abrirModal(id, nombre, ubicacion, precio, imagenUrl, descripcion) {
+      document.getElementById("modalEditar").style.display = "flex";
+      document.getElementById("editarId").value = id;
+      document.getElementById("editarNombre").value = nombre;
+      document.getElementById("editarUbicacion").value = ubicacion;
+      document.getElementById("editarPrecio").value = precio;
+      document.getElementById("editarImagenUrl").value = imagenUrl;
+      document.getElementById("editarDescripcion").value = descripcion;
+    }
+
+    document.getElementById("cancelarEditar").addEventListener("click", () => {
+      document.getElementById("modalEditar").style.display = "none";
+    });
+
+    document.getElementById("formEditar").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const id = document.getElementById("editarId").value;
+      const nombre = document.getElementById("editarNombre").value;
+      const ubicacion = document.getElementById("editarUbicacion").value;
+      const precio = parseFloat(document.getElementById("editarPrecio").value);
+      const imagenUrl = document.getElementById("editarImagenUrl").value;
+      const descripcion = document.getElementById("editarDescripcion").value;
+
+      try {
+        const res = await fetch(`http://localhost:8080/api/hospedajes/${id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ nombre, ubicacion, precio, imagenUrl, descripcion })
+        });
+
+        if (res.ok) {
+          alert("✅ Hospedaje actualizado correctamente.");
+          document.getElementById("modalEditar").style.display = "none";
+          cargarHospedajes();
+        } else {
+          alert("❌ Error al actualizar hospedaje.");
+        }
+      } catch (error) {
+        console.error(error);
+        alert("Error al conectar con el servidor.");
+      }
+    });
+
+    document.getElementById("cerrarSesion").addEventListener("click", () => {
+      localStorage.clear();
+      window.location.href = "/login.html";
+    });
+
+    cargarHospedajes();
+  </script>
 </body>
 </html>

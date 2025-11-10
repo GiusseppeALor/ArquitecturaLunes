@@ -1,71 +1,116 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Gestión de reservas - EcoHospedajes Rurales</title>
-  <link rel="stylesheet" href="/Css/gestionUsuarios.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestión de Reservas | Dueño</title>
+  <link rel="stylesheet" href="/Css/gestion.css">
 </head>
 <body>
+  <header class="navbar">
+    <div class="logo">
+      <img src="/img/logo.jpg" alt="Logo" class="icono">
+      <h1>Panel del Dueño</h1>
+    </div>
+    <nav class="nav-links">
+        <a href="/dueño/RegistrarHospedaje.html" class="activo">Registrar Hospedaje</a>
+        <a href="/dueño/GestionHospedajes.html">Gestión</a>
+        <a href="/dueño/GestionReservas.html" class="activo">Gestión de Reservas</a>
+        <a href="#" id="cerrarSesion">Cerrar Sesión</a>
+      </nav>
+  </header>
 
-  <!-- ===== SIDEBAR ===== -->
-  <aside class="sidebar">
-    <h2>EcoHospedajes</h2>
-    <nav>
-      <a href="/dueño/dashboard.html"><i data-lucide="home"></i> Dashboard</a>
-      <a href="/dueño/gestionUsuarios.html"><i data-lucide="user"></i> Usuarios</a>
-      <a href="/dueño/gestionHospedajes.html"><i data-lucide="hotel"></i> Hospedajes</a>
-      <a href="/dueño/gestionReservas.html" class="active"><i data-lucide="calendar"></i> Reservas</a>
-    </nav>
-  </aside>
+  <main class="container">
+    <h2>Gestión de Reservas</h2>
+    <p>Revisa las reservas recibidas y actualiza su estado.</p>
 
-  <!-- ===== CONTENIDO PRINCIPAL ===== -->
-  <main class="main-content">
-    <h1>Gestión de reservas</h1>
-
-    <section class="buscador">
-      <input type="text" placeholder="Buscar reservas..">
-      <button>Buscar</button>
-    </section>
-
-    <table>
+    <table id="tablaReservas">
       <thead>
         <tr>
-          <th>Cliente</th>
+          <th>ID</th>
           <th>Hospedaje</th>
+          <th>Cliente</th>
+          <th>Fecha Inicio</th>
+          <th>Fecha Fin</th>
           <th>Estado</th>
+          <th>Acción</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>Fernando Lopez</td>
-          <td>El Rancho</td>
-          <td>Confirmada</td>
-        </tr>
-        <tr>
-          <td>Iojan Ramos</td>
-          <td>Cabaña del Sol</td>
-          <td>Confirmada</td>
-        </tr>
-        <tr>
-          <td>Pedro Kavas</td>
-          <td>Refugio Andino</td>
-          <td>Pendiente</td>
-        </tr>
-        <tr>
-          <td>Maria Candia</td>
-          <td>Finca La Soledad</td>
-          <td>Pendiente</td>
-        </tr>
+        <!-- Aquí se llenan las reservas -->
       </tbody>
     </table>
   </main>
 
-  <!-- Iconos (si usas Lucide) -->
-  <script src="https://unpkg.com/lucide@latest"></script>
   <script>
-    lucide.createIcons();
-  </script>
+    async function cargarReservas() {
+      try {
+        const res = await fetch("http://localhost:8080/api/reservas");
+        if (!res.ok) throw new Error("Error al cargar reservas");
+        const reservas = await res.json();
 
+        const tbody = document.querySelector("#tablaReservas tbody");
+        tbody.innerHTML = "";
+
+        reservas.forEach(r => {
+          const fila = document.createElement("tr");
+          fila.innerHTML = `
+            <td>${r.id}</td>
+            <td>${r.hospedaje.nombre}</td>
+            <td>${r.clienteNombre}</td>
+            <td>${r.fechaInicio}</td>
+            <td>${r.fechaFin}</td>
+            <td>
+              <select onchange="actualizarEstado(${r.id}, this.value)">
+                <option value="Pendiente" ${r.estado === 'Pendiente' ? 'selected' : ''}>Pendiente</option>
+                <option value="Confirmada" ${r.estado === 'Confirmada' ? 'selected' : ''}>Confirmada</option>
+                <option value="Cancelada" ${r.estado === 'Cancelada' ? 'selected' : ''}>Cancelada</option>
+              </select>
+            </td>
+            <td><button onclick="eliminarReserva(${r.id})" class="btnEliminar">Eliminar</button></td>
+          `;
+          tbody.appendChild(fila);
+        });
+      } catch (error) {
+        console.error(error);
+        alert("No se pudieron cargar las reservas");
+      }
+    }
+
+    async function actualizarEstado(id, nuevoEstado) {
+      try {
+        const res = await fetch(`http://localhost:8080/api/reservas/${id}/estado`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ estado: nuevoEstado })
+        });
+        if (!res.ok) throw new Error("Error al actualizar el estado");
+        alert("Estado actualizado correctamente");
+      } catch (error) {
+        console.error(error);
+        alert("No se pudo actualizar el estado");
+      }
+    }
+
+    async function eliminarReserva(id) {
+      if (!confirm("¿Seguro que deseas eliminar esta reserva?")) return;
+      try {
+        const res = await fetch(`http://localhost:8080/api/reservas/${id}`, { method: "DELETE" });
+        if (!res.ok) throw new Error("Error al eliminar");
+        alert("Reserva eliminada correctamente");
+        cargarReservas();
+      } catch (error) {
+        console.error(error);
+        alert("No se pudo eliminar la reserva");
+      }
+    }
+
+    function cerrarSesion() {
+      alert("Cerraste sesión correctamente.");
+      localStorage.clear();
+    }
+
+    cargarReservas();
+  </script>
 </body>
 </html>
