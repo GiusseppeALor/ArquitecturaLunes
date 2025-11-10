@@ -1,9 +1,6 @@
 package com.example.eco_hospedajes.controller;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
+import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,11 +28,44 @@ public class ReservaController {
         return reservaRepository.findByUsuarioId(usuarioId);
     }
 
-    // ✅ Obtener todas las reservas (vista del dueño)
+    // ✅ Obtener todas las reservas (vista del dueño con nombre de cliente y fechas correctas)
     @GetMapping
-    public List<Reserva> obtenerTodasLasReservas() {
-        return reservaRepository.findAll();
+public List<Map<String, Object>> obtenerTodasLasReservas() {
+    List<Reserva> reservas = reservaRepository.findAll();
+    List<Map<String, Object>> respuesta = new ArrayList<>();
+
+    for (Reserva r : reservas) {
+        Map<String, Object> item = new HashMap<>();
+        item.put("id", r.getId());
+        item.put("estado", r.getEstado());
+
+        // ✅ Convertir LocalDate a String legible (yyyy-MM-dd)
+        item.put("fechaInicio", (r.getCheckin() != null) ? r.getCheckin().toString() : "—");
+        item.put("fechaFin", (r.getCheckout() != null) ? r.getCheckout().toString() : "—");
+
+        // Datos del hospedaje
+        if (r.getHospedaje() != null) {
+            Map<String, Object> hospedajeData = new HashMap<>();
+            hospedajeData.put("id", r.getHospedaje().getId());
+            hospedajeData.put("nombre", r.getHospedaje().getNombre());
+            item.put("hospedaje", hospedajeData);
+        } else {
+            item.put("hospedaje", null);
+        }
+
+        // Datos del cliente (usuario)
+        if (r.getUsuario() != null) {
+            item.put("clienteNombre", r.getUsuario().getNombre());
+        } else {
+            item.put("clienteNombre", "Sin cliente");
+        }
+
+        respuesta.add(item);
     }
+
+    return respuesta;
+}
+
 
     // ✅ Actualizar estado de una reserva (Confirmada / Cancelada / Pendiente)
     @PutMapping("/{id}/estado")
