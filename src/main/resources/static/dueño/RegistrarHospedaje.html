@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registrar Hospedaje | Panel del Dueño</title>
+  <link rel="stylesheet" href="/Css/RegistrarHospedaje.css">
+</head>
+<body>
+  <header class="navbar">
+    <div class="navbar-container">
+      <div class="logo">
+        <img src="/img/logo.jpg" alt="Logo" class="icono">
+        <div>
+          <h1>EcoHospedajes Rurales</h1>
+          <p>Panel del Dueño</p>
+        </div>
+      </div>
+
+      <nav class="nav-links">
+        <a href="/dueño/registrar_hospedaje.html" class="activo">Registrar Hospedaje</a>
+        <a href="/dueño/gestion_hospedajes.html">Gestión</a>
+        <a href="#" id="cerrarSesion">Cerrar Sesión</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="form-container">
+    <h2>Registrar Nuevo Hospedaje</h2>
+    <form id="formHospedaje">
+      <label for="nombre">Nombre del hospedaje</label>
+      <input type="text" id="nombre" placeholder="Ej: Cabaña Los Andes" required>
+
+      <label for="ubicacion">Ubicación</label>
+      <input type="text" id="ubicacion" placeholder="Ej: Cusco, Perú" required>
+
+      <label for="precio">Precio por noche (S/.)</label>
+      <input type="number" id="precio" min="0" step="0.01" placeholder="Ej: 150.00" required>
+
+      <label for="imagenUrl">URL de imagen</label>
+      <input type="text" id="imagenUrl" placeholder="Ej: https://..." required>
+
+      <label for="descripcion">Descripción</label>
+      <textarea id="descripcion" rows="4" placeholder="Describe tu hospedaje..." required></textarea>
+
+      <button type="submit">Registrar Hospedaje</button>
+    </form>
+
+    <div id="mensaje" class="mensaje"></div>
+  </main>
+
+  <script>
+    // Evento para registrar hospedaje
+    document.getElementById("formHospedaje").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const nombre = document.getElementById("nombre").value.trim();
+      const ubicacion = document.getElementById("ubicacion").value.trim();
+      const precio = parseFloat(document.getElementById("precio").value);
+      const imagenUrl = document.getElementById("imagenUrl").value.trim();
+      const descripcion = document.getElementById("descripcion").value.trim();
+      const mensaje = document.getElementById("mensaje");
+
+      try {
+        const res = await fetch("http://localhost:8080/api/hospedajes", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ nombre, ubicacion, precio, imagenUrl, descripcion })
+        });
+
+        if (res.ok) {
+          mensaje.textContent = "✅ Hospedaje registrado correctamente";
+          mensaje.style.color = "green";
+          e.target.reset();
+        } else {
+          const errorData = await res.json();
+          mensaje.textContent = `❌ Error: ${errorData.mensaje || "No se pudo registrar el hospedaje"}`;
+          mensaje.style.color = "red";
+        }
+      } catch (error) {
+        mensaje.textContent = "❌ Error al conectar con el servidor";
+        mensaje.style.color = "red";
+        console.error(error);
+      }
+    });
+
+    // Cerrar sesión
+    document.getElementById("cerrarSesion").addEventListener("click", () => {
+      localStorage.clear(); // elimina cualquier sesión guardada
+      window.location.href = "/login.html";
+    });
+  </script>
+</body>
+</html>
