@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gestión de hospedajes - EcoHospedajes Rurales</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="/css/gestionHospedajes.css" />
+  </head>
+
+  <body>
+    <!-- ===== BARRA LATERAL ===== -->
+    <aside class="sidebar">
+      <h2>EcoHospedajes</h2>
+      <nav>
+        <a href="/logueado/dashboard_dueño.html"
+          ><i data-lucide="home"></i> Dashboard</a
+        >
+        <a href="/logueado/gestionUsuarios.html"
+          ><i data-lucide="user"></i> Usuarios</a
+        >
+        <a href="/logueado/gestionHospedajes.html" class="active"
+          ><i data-lucide="hotel"></i> Hospedajes</a
+        >
+        <a href="/logueado/gestionReservas.html"
+          ><i data-lucide="calendar"></i> Reservas</a
+        >
+        <a href="#" id="btn-cerrar-sesion"
+          ><i data-lucide="log-out"></i> Cerrar sesión</a
+        >
+      </nav>
+    </aside>
+
+    <!-- ===== CONTENIDO PRINCIPAL ===== -->
+    <main class="main-content">
+      <h1>Gestión de hospedajes</h1>
+
+      <section class="buscador">
+        <input id="buscador" type="text" placeholder="Buscar hospedaje..." />
+        <button id="btn-buscar">Buscar</button>
+      </section>
+
+      <table id="tabla-hospedajes">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Ubicación</th>
+            <th>Precio (S/)</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody id="tabla-cuerpo">
+          <tr>
+            <td colspan="5" style="text-align: center">
+              Cargando hospedajes...
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </main>
+
+    <script>
+      lucide.createIcons();
+
+      // === FUNCIÓN PARA CARGAR HOSPEDAJES ===
+      async function cargarHospedajes(filtro = "") {
+        const tbody = document.getElementById("tabla-cuerpo");
+        tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;">Cargando...</td></tr>`;
+
+        try {
+          const response = await fetch("http://localhost:8080/api/hospedajes");
+          if (!response.ok)
+            throw new Error("No se pudieron obtener los hospedajes.");
+
+          const hospedajes = await response.json();
+
+          // Filtrar si se escribió algo en el buscador
+          const filtrados = hospedajes.filter(
+            (h) =>
+              h.nombre.toLowerCase().includes(filtro.toLowerCase()) ||
+              h.ubicacion.toLowerCase().includes(filtro.toLowerCase())
+          );
+
+          if (filtrados.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;">No se encontraron hospedajes.</td></tr>`;
+            return;
+          }
+
+          tbody.innerHTML = "";
+          filtrados.forEach((h) => {
+            const fila = document.createElement("tr");
+            fila.innerHTML = `
+    <td>${h.nombre}</td>
+    <td>${h.ubicacion}</td>
+    <td>${h.precio}</td>
+    <td>${h.estado ? "Activo" : "Inactivo"}</td>
+    `;
+            tbody.appendChild(fila);
+          });
+        } catch (error) {
+          console.error(error);
+          tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:red;">${error.message}</td></tr>`;
+        }
+      }
+
+      // === GESTIÓN DE SESIÓN ===
+      document.addEventListener("DOMContentLoaded", () => {
+        const usuarioRol = localStorage.getItem("usuarioRol");
+        if (!usuarioRol || usuarioRol !== "ADMIN") {
+          alert(
+            "Acceso denegado. Solo los administradores pueden ver esta sección."
+          );
+          window.location.href = "/"; // redirige al login
+          return;
+        }
+
+        // === Ocultar secciones del menú según rol ===
+        const rol = localStorage.getItem("usuarioRol");
+        if (rol !== "ADMIN") {
+          document.querySelectorAll(".sidebar nav a").forEach((a) => {
+            if (a.href.includes("gestion")) a.style.display = "none";
+          });
+        }
+
+        // Botón cerrar sesión
+        const btnCerrarSesion = document.getElementById("btn-cerrar-sesion");
+        btnCerrarSesion.addEventListener("click", (e) => {
+          e.preventDefault();
+          localStorage.clear();
+          window.location.href = "/";
+        });
+
+        // Cargar hospedajes
+        cargarHospedajes();
+
+        // Búsqueda
+        const btnBuscar = document.getElementById("btn-buscar");
+        const inputBuscador = document.getElementById("buscador");
+        btnBuscar.addEventListener("click", () => {
+          const filtro = inputBuscador.value.trim();
+          cargarHospedajes(filtro);
+        });
+      });
+    </script>
+  </body>
+</html>

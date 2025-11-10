@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gestión de reservas - EcoHospedajes Rurales</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="/css/gestionReservas.css" />
+  </head>
+
+  <body>
+    <!-- ===== BARRA LATERAL ===== -->
+    <aside class="sidebar">
+      <h2>EcoHospedajes</h2>
+      <nav>
+        <a href="/logueado/dashboard_dueño.html"
+          ><i data-lucide="home"></i> Dashboard</a
+        >
+        <a href="/logueado/gestionUsuarios.html"
+          ><i data-lucide="user"></i> Usuarios</a
+        >
+        <a href="/logueado/gestionHospedajes.html"
+          ><i data-lucide="hotel"></i> Hospedajes</a
+        >
+        <a href="/logueado/gestionReservas.html" class="active"
+          ><i data-lucide="calendar"></i> Reservas</a
+        >
+        <a href="#" id="btn-cerrar-sesion"
+          ><i data-lucide="log-out"></i> Cerrar sesión</a
+        >
+      </nav>
+    </aside>
+
+    <!-- ===== CONTENIDO PRINCIPAL ===== -->
+    <main class="main-content">
+      <h1>Gestión de reservas</h1>
+
+      <section class="buscador">
+        <input
+          id="buscador"
+          type="text"
+          placeholder="Buscar por usuario o hospedaje..."
+        />
+        <button id="btn-buscar">Buscar</button>
+      </section>
+
+      <table id="tabla-reservas">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Cliente</th>
+            <th>Hospedaje</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody id="tabla-cuerpo">
+          <tr>
+            <td colspan="4" style="text-align: center">Cargando reservas...</td>
+          </tr>
+        </tbody>
+      </table>
+    </main>
+
+    <script>
+      lucide.createIcons();
+
+      // === FUNCIÓN PARA CARGAR RESERVAS ===
+      async function cargarReservas(filtro = "") {
+        const tbody = document.getElementById("tabla-cuerpo");
+        tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;">Cargando...</td></tr>`;
+
+        try {
+          const response = await fetch("http://localhost:8080/api/reservas");
+          if (!response.ok)
+            throw new Error("No se pudieron obtener las reservas.");
+
+          const reservas = await response.json();
+
+          // Filtrar por usuario o hospedaje
+          const filtrados = reservas.filter(
+            (r) =>
+              r.usuario.nombre.toLowerCase().includes(filtro.toLowerCase()) ||
+              r.hospedaje.nombre.toLowerCase().includes(filtro.toLowerCase())
+          );
+
+          if (filtrados.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;">No se encontraron reservas.</td></tr>`;
+            return;
+          }
+
+          tbody.innerHTML = "";
+          filtrados.forEach((r) => {
+            const fila = document.createElement("tr");
+            fila.innerHTML = `
+              <td>${r.id}</td>
+              <td>${r.usuario.nombre}</td>
+              <td>${r.hospedaje.nombre}</td>
+              <td>${r.estado}</td>
+            `;
+            tbody.appendChild(fila);
+          });
+        } catch (error) {
+          console.error(error);
+          tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:red;">${error.message}</td></tr>`;
+        }
+      }
+
+      // === Ocultar secciones del menú según rol ===
+      const rol = localStorage.getItem("usuarioRol");
+      if (rol !== "ADMIN") {
+        document.querySelectorAll(".sidebar nav a").forEach((a) => {
+          if (a.href.includes("gestion")) a.style.display = "none";
+        });
+      }
+
+      // === GESTIÓN DE SESIÓN ===
+      document.addEventListener("DOMContentLoaded", () => {
+        const usuarioRol = localStorage.getItem("usuarioRol");
+        if (!usuarioRol || usuarioRol !== "ADMIN") {
+          alert(
+            "Acceso denegado. Solo los administradores pueden ver esta sección."
+          );
+          window.location.href = "/"; // redirige al login
+          return;
+        }
+
+        // Botón cerrar sesión
+        const btnCerrarSesion = document.getElementById("btn-cerrar-sesion");
+        btnCerrarSesion.addEventListener("click", (e) => {
+          e.preventDefault();
+          localStorage.clear();
+          window.location.href = "/";
+        });
+
+        // Cargar reservas
+        cargarReservas();
+
+        // Búsqueda
+        const btnBuscar = document.getElementById("btn-buscar");
+        const inputBuscador = document.getElementById("buscador");
+        btnBuscar.addEventListener("click", () => {
+          const filtro = inputBuscador.value.trim();
+          cargarReservas(filtro);
+        });
+      });
+    </script>
+  </body>
+</html>

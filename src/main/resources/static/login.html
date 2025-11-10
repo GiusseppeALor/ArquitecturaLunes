@@ -60,27 +60,27 @@ document.getElementById("loginForm").addEventListener("submit", async (event) =>
 
     const data = await response.json();
 
-    if (response.ok && !data.mensaje) {
-      localStorage.setItem("usuarioLogueado", JSON.stringify(data));
-      localStorage.setItem("usuarioId", data.id);
-      localStorage.setItem("usuarioRol", data.rol);
+            if (response.ok && !data.mensaje) {
+              // Guardamos el objeto completo
+              localStorage.setItem("usuarioLogueado", JSON.stringify(data));
 
-      // Redirección según el rol
-      if (data.rol === "DUEÑO") {
-        window.location.href = "/dueño/RegistrarHospedaje.html";
-      } else {
-        window.location.href = "/logeado/index.html";
-      }
+              // Guardamos el ID para 'perfil.html'
+              localStorage.setItem("usuarioId", data.id);
 
-    } else {
-      alert(data.mensaje || "Error al iniciar sesión");
-    }
-  } catch (error) {
-    console.error("Error al iniciar sesión:", error);
-    alert("Error al conectar con el servidor");
-  }
-});
-</script>
+              // --- ¡CAMBIO IMPORTANTE AÑADIDO! ---
+              // Guardamos el Rol para el Dashboard
+              localStorage.setItem("usuarioRol", data.rol);
+              // ------------------------------------
 
+              window.location.href = "/logeado/index.html";
+            } else {
+              alert(data.mensaje || "Error al iniciar sesión");
+            }
+          } catch (error) {
+            console.error("Error al iniciar sesión:", error);
+            alert("Error al conectar con el servidor");
+          }
+        });
+    </script>
   </body>
 </html>

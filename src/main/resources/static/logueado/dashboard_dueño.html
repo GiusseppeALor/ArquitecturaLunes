@@ -18,8 +18,8 @@
         </div>
       </div>
       <nav>
-        <a href="../logeado/catalogo.html">Catálogo</a>
-        <a href="../logeado/historial.html">Mis reservas</a>
+        <a href="../logueado/catalogo.html">Catálogo</a>
+        <a href="../logueado/historial.html">Mis reservas</a>
         <a href="/" class="forgot" id="btn-cerrar-sesion"> Cerrar sesión </a>
       </nav>
     </header>
@@ -56,22 +56,22 @@
 
     <script>
       document.addEventListener("DOMContentLoaded", () => {
-        // --- 1. OBTENER ID DE USUARIO (Propietario) ---
-        const propietarioId = localStorage.getItem("usuarioId");
-        const btnCerrarSesion = document.getElementById("btn-cerrar-sesion");
+        const usuarioRol = localStorage.getItem("usuarioRol");
+        if (!usuarioRol || usuarioRol !== "ADMIN") {
+          alert(
+            "Acceso denegado. Solo los administradores pueden ver esta sección."
+          );
+          window.location.href = "/"; // redirige al login
+          return;
+        }
 
-        // --- 2. GESTIONAR CIERRE DE SESIÓN ---
-        btnCerrarSesion.addEventListener("click", (e) => {
-          e.preventDefault();
-          localStorage.removeItem("usuarioId");
-          localStorage.removeItem("usuarioLogueado");
-          // --- ¡CAMBIO AQUÍ! Faltaba borrar el rol ---
-          localStorage.removeItem("usuarioRol");
-
-          // --- ¡CAMBIO IMPORTANTE! ---
-          // Redirigimos a la URL raíz (/), no al archivo.
-          window.location.href = "/";
-        });
+        // === Ocultar secciones del menú según rol ===
+        const rol = localStorage.getItem("usuarioRol");
+        if (rol !== "ADMIN") {
+          document.querySelectorAll(".sidebar nav a").forEach((a) => {
+            if (a.href.includes("gestion")) a.style.display = "none";
+          });
+        }
 
         // --- 3. VERIFICAR LOGIN ---
         if (!propietarioId) {

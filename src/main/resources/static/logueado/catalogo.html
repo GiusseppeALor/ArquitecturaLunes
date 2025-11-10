@@ -16,10 +16,10 @@
       </div>
     </div>
     <nav>
-      <a href="/logeado/index.html">Inicio</a>
-      <a href="/logeado/catalogo.html">Catálogo</a>
-      <a href="/logeado/historial.html">Reservas</a>
-      <a href="/logeado/perfil.html">Perfil</a>
+      <a href="/logueado/index.html">Inicio</a>
+      <a href="/logueado/catalogo.html">Catálogo</a>
+      <a href="/logueado/historial.html">Reservas</a>
+      <a href="/logueado/perfil.html">Perfil</a>
       <a href="/index.html" class="forgot"> Cerrar sesión </a>
     </nav>
   </header>
@@ -45,7 +45,7 @@
                  <p>${h.descripcion}</p>
                  <p><strong>Ubicación:</strong> ${h.ubicacion}</p>
                  <p><strong>Precio:</strong> S/. ${h.precio}</p>
-                 <button onclick="window.location.href='/logeado/detalle.html?id=${h.id}'">Ver más</button>`;
+                 <button onclick="window.location.href='/logueado/detalle.html?id=${h.id}'">Ver más</button>`;
                 contenedor.appendChild(card);
             });
         }

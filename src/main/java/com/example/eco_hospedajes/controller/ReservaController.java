@@ -1,18 +1,16 @@
 package com.example.eco_hospedajes.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable; // <-- IMPORTACIÓN AÑADIDA
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.eco_hospedajes.model.Reserva;
 import com.example.eco_hospedajes.repository.ReservaRepository;
+import com.example.eco_hospedajes.repository.UsuarioRepository;
+import com.example.eco_hospedajes.repository.HospedajeRepository;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -22,24 +20,68 @@ public class ReservaController {
     @Autowired
     private ReservaRepository reservaRepository;
 
-    @PostMapping
-    public Reserva crearReserva(@RequestBody Reserva reserva) {
-        // --- NOTA IMPORTANTE ---
-        // Para que esto funcione, el JSON que envíes desde el frontend
-        // debe incluir los IDs de usuario y hospedaje.
-        // Ej: { "checkin": "...", "usuario": {"id": 5}, "hospedaje": {"id": 2} }
-        return reservaRepository.save(reserva);
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private HospedajeRepository hospedajeRepository;
+
+    // Listar todas las reservas
+    @GetMapping
+    public List<Reserva> listarTodas() {
+        return reservaRepository.findAll();
     }
 
-    // --- V NUEVO MÉTODO PARA EL HISTORIAL V ---
-
-    /**
-     * Este método obtiene todas las reservas de un usuario específico.
-     * Se accede con una URL como: GET /api/reservas/usuario/5
-     */
+    // Listar reservas por usuario
     @GetMapping("/usuario/{usuarioId}")
-    public List<Reserva> obtenerReservasPorUsuario(@PathVariable Long usuarioId) {
-        // Usamos el método que creamos en el Repositorio
+    public List<Reserva> listarPorUsuario(@PathVariable Long usuarioId) {
         return reservaRepository.findByUsuarioId(usuarioId);
+    }
+
+    // Crear reserva (validando usuario y hospedaje)
+    @PostMapping
+    public ResponseEntity<?> crearReserva(@RequestBody Reserva reserva) {
+        if (reserva.getUsuario() == null || reserva.getUsuario().getId() == null ||
+            reserva.getHospedaje() == null || reserva.getHospedaje().getId() == null) {
+            return ResponseEntity.badRequest().body("Falta usuario o hospedaje");
+        }
+
+        usuarioRepository.findById(reserva.getUsuario().getId())
+                .ifPresent(reserva::setUsuario);
+
+        hospedajeRepository.findById(reserva.getHospedaje().getId())
+                .ifPresent(reserva::setHospedaje);
+
+        // Por defecto, si quieres puedes asignar estado "Pendiente"
+        if (reserva.getEstado() == null) {
+            reserva.setEstado("Pendiente");
+        }
+
+        Reserva creado = reservaRepository.save(reserva);
+        return ResponseEntity.ok(creado);
+    }
+
+    // Actualizar estado de reserva
+    @PutMapping("/{id}/estado")
+    public ResponseEntity<?> actualizarEstado(@PathVariable Long id, @RequestBody Reserva datos) {
+        Optional<Reserva> r = reservaRepository.findById(id);
+        if (r.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Reserva reserva = r.get();
+        reserva.setEstado(datos.getEstado());
+        reservaRepository.save(reserva);
+        return ResponseEntity.ok(reserva);
+    }
+
+    // Eliminar reserva
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> eliminarReserva(@PathVariable Long id) {
+        if (!reservaRepository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+        reservaRepository.deleteById(id);
+        return ResponseEntity.ok().build();
     }
 }

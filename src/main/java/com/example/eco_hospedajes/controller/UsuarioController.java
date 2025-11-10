@@ -61,6 +61,33 @@ public class UsuarioController {
         }
     }
 
+    @PostMapping("/login")
+public ResponseEntity<?> login(@RequestBody Map<String, String> body) {
+    String email = body.get("email");
+    String contrasena = body.get("contrasena");
+
+    if(email == null || contrasena == null){
+        return ResponseEntity.badRequest().body(Map.of("mensaje", "Email y contraseña son requeridos"));
+    }
+
+    Usuario usuario = usuarioRepository.findByEmailAndContrasena(email, contrasena);
+    if(usuario == null){
+        return ResponseEntity.status(401).body(Map.of("mensaje", "Credenciales incorrectas"));
+    }
+
+    // Retornamos solo los datos necesarios (sin contraseña)
+    Map<String, Object> respuesta = Map.of(
+        "id", usuario.getId(),
+        "nombre", usuario.getNombre(),
+        "apellidos", usuario.getApellidos(),
+        "email", usuario.getEmail(),
+        "rol", usuario.getRol()
+    );
+
+    return ResponseEntity.ok(respuesta);
+}
+
+
     @PutMapping("/{id}")
     public ResponseEntity<Usuario> actualizarPerfilUsuario(
             @PathVariable Long id,
