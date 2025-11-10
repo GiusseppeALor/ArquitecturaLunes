@@ -71,53 +71,62 @@ nav a {
   padding: 10px 40px;
 }
 
-.cards {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr); 
-  gap: 30px;
-  justify-items: center;
-  margin-top: 20px;
-}
+ #catalogo {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            padding: 20px;
+            width: 90%;
+            margin: 0 auto 50px;
+        }
 
-.card {
-  background-color: white;
-  border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  width: 300px;
-  overflow: hidden;
-  text-align: left;
-}
+        /* ====== TARJETAS ====== */
+        .card {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
 
-.card img {
-  width: 100%;
-  height: 180px;
-  object-fit: cover;
-}
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        }
 
-.info {
-  padding: 15px;
-}
+        .card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
 
-.info h3 {
-  margin: 0;
-  color: #2C5F4E;
-}
+        .card h3 {
+            margin: 10px 15px 5px;
+            color: #2e8b57;
+            font-size: 18px;
+        }
 
-.info .ubicacion {
-  color: #435E4F;
-  font-size: 14px;
-  margin-bottom: 5px;
-}
+        .card p {
+            margin: 5px 15px;
+            color: #555;
+            font-size: 14px;
+        }
 
-.info button {
-  background-color: #2C5F4E;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  padding: 8px 16px;
-  cursor: pointer;
-  margin-top: 10px;
-}
+        .card button {
+            background-color: #2e8b57;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 10px 20px;
+            margin: 15px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .card button:hover {
+            background-color: #256b45;
+        }
 
 footer {
   background-color: #ffffff;
