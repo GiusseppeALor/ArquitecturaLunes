@@ -51,7 +51,6 @@
   </main>
 
   <script>
-    // Evento para registrar hospedaje
     document.getElementById("formHospedaje").addEventListener("submit", async (e) => {
       e.preventDefault();
 
@@ -85,9 +84,8 @@
       }
     });
 
-    // Cerrar sesión
     document.getElementById("cerrarSesion").addEventListener("click", () => {
-      localStorage.clear(); // elimina cualquier sesión guardada
+      localStorage.clear(); 
       window.location.href = "/login.html";
     });
   </script>

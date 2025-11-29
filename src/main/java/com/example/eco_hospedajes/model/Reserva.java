@@ -23,25 +23,21 @@ public class Reserva {
     private int personas;
     private double precioTotal;
 
-    // --- CONEXIONES AÑADIDAS ---
 
-    private String estado; // Para "Confirmada", "Cancelada", "Pendiente"
+    private String estado;
 
-    @ManyToOne // Muchas reservas pertenecen a UN usuario
+    @ManyToOne 
     @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
 
-    @ManyToOne // Muchas reservas son de UN hospedaje
+    @ManyToOne
     @JoinColumn(name = "hospedaje_id", nullable = false)
     private Hospedaje hospedaje;
 
-    // --- FIN DE CONEXIONES ---
-
-    // Constructor vacío
     public Reserva() {
+    
     }
 
-    // Getters y Setters (actualizados)
 
     public Long getId() {
         return id;
@@ -82,8 +78,6 @@ public class Reserva {
     public void setPrecioTotal(double precioTotal) {
         this.precioTotal = precioTotal;
     }
-
-    // --- NUEVOS GETTERS Y SETTERS ---
 
     public String getEstado() {
         return estado;

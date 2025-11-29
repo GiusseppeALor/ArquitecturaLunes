@@ -15,26 +15,22 @@ public class HospedajeController {
     @Autowired
     private HospedajeRepository hospedajeRepository;
 
-    // ✅ Listar todos los hospedajes
     @GetMapping
     public List<Hospedaje> listarHospedajes() {
         return hospedajeRepository.findAll();
     }
 
-    // ✅ Obtener hospedaje por ID
     @GetMapping("/{id}")
     public Hospedaje obtenerHospedajePorId(@PathVariable Long id) {
         return hospedajeRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Hospedaje no encontrado con ID: " + id));
     }
 
-    // ✅ Agregar nuevo hospedaje
     @PostMapping
     public Hospedaje agregarHospedaje(@RequestBody Hospedaje hospedaje) {
         return hospedajeRepository.save(hospedaje);
     }
 
-    // ✅ Actualizar hospedaje existente
     @PutMapping("/{id}")
     public Hospedaje actualizarHospedaje(@PathVariable Long id, @RequestBody Hospedaje hospedajeActualizado) {
         Hospedaje hospedaje = hospedajeRepository.findById(id)
@@ -49,7 +45,6 @@ public class HospedajeController {
         return hospedajeRepository.save(hospedaje);
     }
 
-    // ✅ Eliminar hospedaje
     @DeleteMapping("/{id}")
     public void eliminarHospedaje(@PathVariable Long id) {
         if (!hospedajeRepository.existsById(id)) {

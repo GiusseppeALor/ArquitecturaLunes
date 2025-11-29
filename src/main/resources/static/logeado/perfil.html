@@ -68,45 +68,30 @@
     </div>
 
     <script>
-      // Espera a que todo el HTML esté cargado antes de ejecutar el script
       document.addEventListener("DOMContentLoaded", () => {
-        // --- 1. OBTENER REFERENCIAS A LOS ELEMENTOS DEL HTML ---
         const nombreInput = document.getElementById("user-nombre");
         const apellidosInput = document.getElementById("user-apellidos");
         const emailInput = document.getElementById("user-email");
-
         const btnEditar = document.getElementById("btn-editar");
         const btnCambiarPass = document.getElementById("btn-cambiar-pass");
 
-        // (Opcional, si quieres implementar el historial que omitimos)
-        // const btnHistorial = document.getElementById('btn-historial');
-
-        // --- 2. OBTENER EL ID DEL USUARIO (DE LA MEMORIA) ---
-        // Esto es lo que guardamos durante el login
         const usuarioId = localStorage.getItem("usuarioId");
 
-        // Si no hay ID, el usuario no ha iniciado sesión. Lo echamos.
         if (!usuarioId) {
           alert("Error: No has iniciado sesión. Serás redirigido.");
-          // Lo mandamos de vuelta al login (asegúrate de que la ruta sea correcta)
           window.location.href = "/login.html";
-          return; // Detiene la ejecución del script
+          return; 
         }
 
-        // --- 3. FUNCIÓN PARA CARGAR LOS DATOS DEL PERFIL ---
         async function cargarDatosUsuario() {
           try {
-            // Llamamos al endpoint GET que creamos en Spring Boot
             const response = await fetch(`/api/usuarios/${usuarioId}`);
 
             if (!response.ok) {
-              // Si el ID no existe o hay un error
               throw new Error("No se pudo cargar el perfil del usuario.");
             }
 
             const usuario = await response.json();
-
-            // Rellenamos los campos <input> con los datos del usuario
             nombreInput.value = usuario.nombre;
             apellidosInput.value = usuario.apellidos;
             emailInput.value = usuario.email;
@@ -116,17 +101,14 @@
           }
         }
 
-        // --- 4. FUNCIÓN PARA GUARDAR LOS CAMBIOS DEL PERFIL ---
         async function guardarCambios() {
-          // Creamos el objeto JSON para enviar al backend
           const datosActualizados = {
             nombre: nombreInput.value,
             apellidos: apellidosInput.value,
-            email: emailInput.value, // Nota: Tu API actualiza el email, puedes quitar esto si no quieres
+            email: emailInput.value, 
           };
 
           try {
-            // Llamamos al endpoint PUT que creamos en Spring Boot
             const response = await fetch(`/api/usuarios/${usuarioId}`, {
               method: "PUT",
               headers: {
@@ -146,17 +128,14 @@
           }
         }
 
-        // --- 5. FUNCIÓN PARA CAMBIAR LA CONTRASEÑA ---
         async function cambiarContrasena() {
-          // Pedimos la nueva contraseña (simple, para tu demo)
           const nuevaContrasena = prompt("Ingresa tu nueva contraseña:");
 
           if (!nuevaContrasena) {
-            return; // El usuario canceló
+            return; 
           }
 
           try {
-            // Llamamos al endpoint PATCH que creamos
             const response = await fetch(
               `/api/usuarios/${usuarioId}/contrasena`,
               {
@@ -164,7 +143,7 @@
                 headers: {
                   "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ contrasena: nuevaContrasena }), // Enviamos el JSON { "contrasena": "..." }
+                body: JSON.stringify({ contrasena: nuevaContrasena }), 
               }
             );
 
@@ -179,37 +158,22 @@
           }
         }
 
-        // --- 6. ASIGNAR EVENTOS A LOS BOTONES ---
-
-        // Lógica del botón "Editar" / "Guardar"
         btnEditar.addEventListener("click", async () => {
           if (btnEditar.textContent === "Editar") {
-            // MODO EDICIÓN
             nombreInput.readOnly = false;
             apellidosInput.readOnly = false;
-            // Opcional: No recomendamos dejar editar el email
-            // emailInput.readOnly = false;
-
             btnEditar.textContent = "Guardar";
             nombreInput.focus();
           } else {
-            // MODO GUARDAR
             await guardarCambios();
-
             nombreInput.readOnly = true;
             apellidosInput.readOnly = true;
-            // emailInput.readOnly = true;
-
             btnEditar.textContent = "Editar";
           }
         });
-
-        // Lógica del botón "Cambio de contraseña"
         btnCambiarPass.addEventListener("click", () => {
           cambiarContrasena();
         });
-
-        // --- 7. CARGAR LOS DATOS AL INICIAR LA PÁGINA ---
         cargarDatosUsuario();
       });
     </script>

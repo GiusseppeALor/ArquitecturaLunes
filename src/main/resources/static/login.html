@@ -65,7 +65,6 @@ document.getElementById("loginForm").addEventListener("submit", async (event) =>
       localStorage.setItem("usuarioId", data.id);
       localStorage.setItem("usuarioRol", data.rol);
 
-      // Redirección según el rol
       if (data.rol === "DUEÑO") {
         window.location.href = "/dueño/RegistrarHospedaje.html";
       } else {

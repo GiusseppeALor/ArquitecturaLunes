@@ -16,19 +16,16 @@ public class ReservaController {
     @Autowired
     private ReservaRepository reservaRepository;
 
-    // ✅ Crear nueva reserva
     @PostMapping
     public Reserva crearReserva(@RequestBody Reserva reserva) {
         return reservaRepository.save(reserva);
     }
 
-    // ✅ Obtener reservas por usuario (historial)
     @GetMapping("/usuario/{usuarioId}")
     public List<Reserva> obtenerReservasPorUsuario(@PathVariable Long usuarioId) {
         return reservaRepository.findByUsuarioId(usuarioId);
     }
 
-    // ✅ Obtener todas las reservas (vista del dueño con nombre de cliente y fechas correctas)
     @GetMapping
 public List<Map<String, Object>> obtenerTodasLasReservas() {
     List<Reserva> reservas = reservaRepository.findAll();
@@ -39,11 +36,9 @@ public List<Map<String, Object>> obtenerTodasLasReservas() {
         item.put("id", r.getId());
         item.put("estado", r.getEstado());
 
-        // ✅ Convertir LocalDate a String legible (yyyy-MM-dd)
         item.put("fechaInicio", (r.getCheckin() != null) ? r.getCheckin().toString() : "—");
         item.put("fechaFin", (r.getCheckout() != null) ? r.getCheckout().toString() : "—");
 
-        // Datos del hospedaje
         if (r.getHospedaje() != null) {
             Map<String, Object> hospedajeData = new HashMap<>();
             hospedajeData.put("id", r.getHospedaje().getId());
@@ -53,7 +48,6 @@ public List<Map<String, Object>> obtenerTodasLasReservas() {
             item.put("hospedaje", null);
         }
 
-        // Datos del cliente (usuario)
         if (r.getUsuario() != null) {
             item.put("clienteNombre", r.getUsuario().getNombre());
         } else {
@@ -67,7 +61,6 @@ public List<Map<String, Object>> obtenerTodasLasReservas() {
 }
 
 
-    // ✅ Actualizar estado de una reserva (Confirmada / Cancelada / Pendiente)
     @PutMapping("/{id}/estado")
     public ResponseEntity<?> actualizarEstado(@PathVariable Long id, @RequestBody Map<String, String> body) {
         String nuevoEstado = body.get("estado");
@@ -84,7 +77,6 @@ public List<Map<String, Object>> obtenerTodasLasReservas() {
         return ResponseEntity.ok(reserva);
     }
 
-    // ✅ Eliminar una reserva
     @DeleteMapping("/{id}")
     public ResponseEntity<?> eliminarReserva(@PathVariable Long id) {
         if (!reservaRepository.existsById(id)) {

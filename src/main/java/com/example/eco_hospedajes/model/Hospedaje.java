@@ -22,14 +22,10 @@ public class Hospedaje {
     private String imagenUrl;
     private String descripcion;
 
-    // --- CONEXIÓN AÑADIDA ---
-    // Muchos hospedajes pueden pertenecer a UN propietario
     @ManyToOne
-    @JoinColumn(name = "propietario_id") // Esto crea la columna 'propietario_id'
+    @JoinColumn(name = "propietario_id") 
     private Usuario propietario;
-    // -------------------------
 
-    // Getters y Setters
     public Long getId() {
         return id;
     }
@@ -78,7 +74,6 @@ public class Hospedaje {
         this.descripcion = descripcion;
     }
 
-    // --- NUEVO GETTER Y SETTER ---
     public Usuario getPropietario() {
         return propietario;
     }

@@ -40,75 +40,62 @@
     </div>
 
     <script>
-      // --- Variables Globales ---
       let precioPorNoche = 0;
       let hospedajeId = null;
       let usuarioId = null;
 
-      // --- Referencias a elementos del DOM ---
       const form = document.getElementById("reservaForm");
       const checkinInput = document.getElementById("checkin");
       const checkoutInput = document.getElementById("checkout");
       const detalleCalculoEl = document.getElementById("detalle-calculo");
       const precioFinalEl = document.getElementById("precio-final");
 
-      // --- 1. EJECUTAR AL CARGAR LA PÁGINA ---
       document.addEventListener("DOMContentLoaded", () => {
-        // Leer datos del Login (de localStorage)
         usuarioId = localStorage.getItem("usuarioId");
 
         if (!usuarioId) {
           alert("Debes iniciar sesión para reservar.");
-          window.location.href = "/login.html"; // Redirigir al login
+          window.location.href = "/login.html"; 
           return;
         }
 
-        // Leer datos del Hospedaje (de la URL)
         const params = new URLSearchParams(window.location.search);
         hospedajeId = params.get("id");
         const nombre = params.get("nombre");
-        precioPorNoche = parseFloat(params.get("precio")) || 0; // Convertir a número
+        precioPorNoche = parseFloat(params.get("precio")) || 0; 
 
         if (!hospedajeId) {
           alert("Error: No se especificó un hospedaje.");
-          window.location.href = "/catalogo.html"; // Redirigir al catálogo
+          window.location.href = "/catalogo.html"; 
           return;
         }
 
-        // Actualizar la vista
         document.getElementById(
           "hospedaje-nombre"
         ).textContent = `Reserva ahora en ${nombre}`;
-        actualizarPrecio(); // Pone el precio base
+        actualizarPrecio(); 
       });
 
-      // --- 2. FUNCIÓN PARA ACTUALIZAR EL PRECIO (DINÁMICO) ---
       function actualizarPrecio() {
         const checkin = new Date(checkinInput.value);
         const checkout = new Date(checkoutInput.value);
         let noches = 0;
 
-        // Validar que las fechas sean correctas
         if (checkinInput.value && checkoutInput.value && checkout > checkin) {
           noches = (checkout - checkin) / (1000 * 60 * 60 * 24);
         }
 
         const precioTotal = precioPorNoche * noches;
-
-        // Actualizar el HTML
         detalleCalculoEl.textContent = `S/${precioPorNoche} x ${noches} noches`;
         precioFinalEl.textContent = `S/${precioTotal.toFixed(2)}`;
       }
 
-      // --- 3. ASIGNAR EVENTOS A LOS INPUTS DE FECHA ---
       checkinInput.addEventListener("change", actualizarPrecio);
       checkoutInput.addEventListener("change", actualizarPrecio);
 
-      // --- 4. ENVIAR EL FORMULARIO ---
       form.addEventListener("submit", async (event) => {
-        event.preventDefault(); // Evitar que la página recargue
+        event.preventDefault(); 
 
-        // Obtener los valores finales
         const checkin = checkinInput.value;
         const checkout = checkoutInput.value;
         const personas = document.getElementById("personas").value;
@@ -122,15 +109,12 @@
 
         const precioTotal = precioPorNoche * noches;
 
-        // --- ¡ESTE ES EL OBJETO CORRECTO PARA EL BACKEND! ---
         const reserva = {
           checkin: checkin,
           checkout: checkout,
-          personas: parseInt(personas), // Convertir a número
+          personas: parseInt(personas), 
           precioTotal: precioTotal,
-          estado: "Confirmada", // Estado por defecto
-
-          // --- Las conexiones que faltaban ---
+          estado: "Confirmada", 
           usuario: {
             id: usuarioId,
           },
@@ -139,7 +123,6 @@
           },
         };
 
-        // --- 5. LLAMAR A LA API (POST) ---
         try {
           const response = await fetch("http://localhost:8080/api/reservas", {
             method: "POST",
@@ -149,7 +132,6 @@
 
           if (response.ok) {
             alert("✅ ¡Reserva confirmada con éxito!");
-            // Redirigir al historial para ver la nueva reserva
             window.location.href = "/logeado/historial.html";
           } else {
             throw new Error("Error del servidor al crear la reserva.");

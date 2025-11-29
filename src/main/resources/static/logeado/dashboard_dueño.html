@@ -56,31 +56,22 @@
 
     <script>
       document.addEventListener("DOMContentLoaded", () => {
-        // --- 1. OBTENER ID DE USUARIO (Propietario) ---
         const propietarioId = localStorage.getItem("usuarioId");
         const btnCerrarSesion = document.getElementById("btn-cerrar-sesion");
-
-        // --- 2. GESTIONAR CIERRE DE SESIÓN ---
         btnCerrarSesion.addEventListener("click", (e) => {
           e.preventDefault();
           localStorage.removeItem("usuarioId");
           localStorage.removeItem("usuarioLogueado");
-          // --- ¡CAMBIO AQUÍ! Faltaba borrar el rol ---
           localStorage.removeItem("usuarioRol");
-
-          // --- ¡CAMBIO IMPORTANTE! ---
-          // Redirigimos a la URL raíz (/), no al archivo.
           window.location.href = "/";
         });
 
-        // --- 3. VERIFICAR LOGIN ---
         if (!propietarioId) {
           alert("Error: No has iniciado sesión como propietario.");
           window.location.href = "/login.html";
           return;
         }
 
-        // --- 4. REFERENCIAS A LOS LIENZOS (CANVAS) ---
         const ctxReservas = document
           .getElementById("reservasChart")
           .getContext("2d");
@@ -88,17 +79,14 @@
           .getElementById("ingresosChart")
           .getContext("2d");
 
-        // --- 5. FUNCIÓN PARA PINTAR LAS GRÁFICAS ---
         async function cargarDashboard() {
           try {
-            // Llamamos al nuevo endpoint del backend
             const response = await fetch(`/api/dashboard/${propietarioId}`);
             if (!response.ok) {
               throw new Error("No se pudieron cargar los datos del dashboard.");
             }
             const data = await response.json();
 
-            // --- Procesar datos para Gráfica 1: Reservas por Mes ---
             const reservasLabels = data.reservasPorMes.map(
               (item) => item.label
             );
@@ -114,7 +102,7 @@
                   {
                     label: "N° de Reservas",
                     data: reservasValores,
-                    backgroundColor: "#8faba0", // Verde de tu marca
+                    backgroundColor: "#8faba0", 
                     borderRadius: 4,
                   },
                 ],
@@ -127,7 +115,6 @@
               },
             });
 
-            // --- Procesar datos para Gráfica 2: Ingresos por Mes ---
             const ingresosLabels = data.ingresosPorMes.map(
               (item) => item.label
             );
@@ -143,7 +130,7 @@
                   {
                     label: "Ingresos (S/)",
                     data: ingresosValores,
-                    backgroundColor: "#333", // Color oscuro
+                    backgroundColor: "#333", 
                     borderRadius: 4,
                   },
                 ],
@@ -160,8 +147,6 @@
             alert(error.message);
           }
         }
-
-        // --- 6. EJECUTAR LA FUNCIÓN AL CARGAR LA PÁGINA ---
         cargarDashboard();
       });
     </script>

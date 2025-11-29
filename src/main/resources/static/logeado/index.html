@@ -76,30 +76,18 @@
 
     <script>
       document.addEventListener("DOMContentLoaded", () => {
-        // --- 1. OBTENER DATOS DE SESIÓN (ID y ROL) ---
-        const usuarioRol = localStorage.getItem("usuarioRol"); // <-- Leemos el Rol
-
-        // --- 2. OBTENER REFERENCIAS A LOS BOTONES ---
+        const usuarioRol = localStorage.getItem("usuarioRol"); 
         const btnCerrarSesion = document.getElementById("btn-cerrar-sesion");
         const btnDashboard = document.getElementById("nav-dashboard-link");
-
-        // --- 3. LÓGICA DE ROLES (¡NUEVO!) ---
-        // Revisa si el rol es 'PROPIETARIO'
         if (usuarioRol === "PROPIETARIO") {
-          btnDashboard.style.display = "inline"; // Hacemos visible el botón
+          btnDashboard.style.display = "inline"; 
         }
 
-        // --- 4. GESTIONAR CIERRE DE SESIÓN ---
         btnCerrarSesion.addEventListener("click", (e) => {
-          // Prevenimos que el link nos lleve de inmediato
           e.preventDefault();
-          // Limpiamos toda la memoria de sesión
           localStorage.removeItem("usuarioId");
           localStorage.removeItem("usuarioLogueado");
           localStorage.removeItem("usuarioRol");
-
-          // --- CAMBIO MENOR ---
-          // Te mandamos a la URL raíz (/), que carga el index.html de /templates
           window.location.href = "/";
         });
       });
