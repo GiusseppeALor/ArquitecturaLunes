@@ -66,103 +66,122 @@
   </div>
 
   <script>
-    const tablaBody = document.querySelector("#tablaHospedajes tbody");
-    const mensaje = document.getElementById("mensaje");
+  const tablaBody = document.querySelector("#tablaHospedajes tbody");
+  const mensaje = document.getElementById("mensaje");
 
-    async function cargarHospedajes() {
-      try {
-        const res = await fetch("http://localhost:8080/api/hospedajes");
-        const hospedajes = await res.json();
+  async function cargarHospedajes() {
+    try {
+      const propietarioId = localStorage.getItem("usuarioId");
 
-        tablaBody.innerHTML = "";
-        hospedajes.forEach(h => {
-          const fila = document.createElement("tr");
-          fila.innerHTML = `
-            <td><img src="${h.imagenUrl}" alt="${h.nombre}" class="miniatura"></td>
-            <td>${h.nombre}</td>
-            <td>${h.ubicacion}</td>
-            <td>${h.precio.toFixed(2)}</td>
-            <td>
-              <button class="editar" onclick="abrirModal(${h.id}, '${h.nombre}', '${h.ubicacion}', ${h.precio}, '${h.imagenUrl}', \`${h.descripcion}\`)">✏️</button>
-              <button class="eliminar" onclick="eliminarHospedaje(${h.id})">🗑️</button>
-            </td>
-          `;
-          tablaBody.appendChild(fila);
-        });
-
-      } catch (error) {
-        console.error("Error al cargar hospedajes:", error);
-        mensaje.textContent = "❌ Error al conectar con el servidor.";
+      if (!propietarioId) {
+        mensaje.textContent = "❌ No se encontró la sesión del usuario.";
+        return;
       }
+
+      const res = await fetch(`http://localhost:8080/api/hospedajes/propietario/${propietarioId}`);
+      const hospedajes = await res.json();
+
+      tablaBody.innerHTML = "";
+
+      hospedajes.forEach(h => {
+        const fila = document.createElement("tr");
+        fila.innerHTML = `
+          <td><img src="${h.imagenUrl}" alt="${h.nombre}" class="miniatura"></td>
+          <td>${h.nombre}</td>
+          <td>${h.ubicacion}</td>
+          <td>${h.precio.toFixed(2)}</td>
+          <td>
+            <button class="editar" onclick="abrirModal(
+              ${h.id},
+              '${h.nombre}',
+              '${h.ubicacion}',
+              ${h.precio},
+              '${h.imagenUrl}',
+              \`${h.descripcion}\`
+            )">✏️</button>
+            <button class="eliminar" onclick="eliminarHospedaje(${h.id})">🗑️</button>
+          </td>
+        `;
+        tablaBody.appendChild(fila);
+      });
+
+    } catch (error) {
+      console.error("Error al cargar hospedajes:", error);
+      mensaje.textContent = "❌ Error al conectar con el servidor.";
     }
+  }
 
-    async function eliminarHospedaje(id) {
-      if (!confirm("¿Seguro que quieres eliminar este hospedaje?")) return;
+  async function eliminarHospedaje(id) {
+    if (!confirm("¿Seguro que quieres eliminar este hospedaje?")) return;
 
-      try {
-        const res = await fetch(`http://localhost:8080/api/hospedajes/${id}`, { method: "DELETE" });
-        if (res.ok) {
-          alert("Hospedaje eliminado con éxito.");
-          cargarHospedajes();
-        } else {
-          alert("Error al eliminar hospedaje.");
-        }
-      } catch (error) {
-        console.error(error);
-        alert("Error al conectar con el servidor.");
+    try {
+      const res = await fetch(`http://localhost:8080/api/hospedajes/${id}`, {
+        method: "DELETE"
+      });
+
+      if (res.ok) {
+        alert("Hospedaje eliminado con éxito.");
+        cargarHospedajes();
+      } else {
+        alert("Error al eliminar hospedaje.");
       }
+    } catch (error) {
+      console.error(error);
+      alert("Error al conectar con el servidor.");
     }
+  }
 
-    function abrirModal(id, nombre, ubicacion, precio, imagenUrl, descripcion) {
-      document.getElementById("modalEditar").style.display = "flex";
-      document.getElementById("editarId").value = id;
-      document.getElementById("editarNombre").value = nombre;
-      document.getElementById("editarUbicacion").value = ubicacion;
-      document.getElementById("editarPrecio").value = precio;
-      document.getElementById("editarImagenUrl").value = imagenUrl;
-      document.getElementById("editarDescripcion").value = descripcion;
-    }
+  function abrirModal(id, nombre, ubicacion, precio, imagenUrl, descripcion) {
+    document.getElementById("modalEditar").style.display = "flex";
+    document.getElementById("editarId").value = id;
+    document.getElementById("editarNombre").value = nombre;
+    document.getElementById("editarUbicacion").value = ubicacion;
+    document.getElementById("editarPrecio").value = precio;
+    document.getElementById("editarImagenUrl").value = imagenUrl;
+    document.getElementById("editarDescripcion").value = descripcion;
+  }
 
-    document.getElementById("cancelarEditar").addEventListener("click", () => {
-      document.getElementById("modalEditar").style.display = "none";
-    });
+  document.getElementById("cancelarEditar").addEventListener("click", () => {
+    document.getElementById("modalEditar").style.display = "none";
+  });
 
-    document.getElementById("formEditar").addEventListener("submit", async (e) => {
-      e.preventDefault();
+  document.getElementById("formEditar").addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-      const id = document.getElementById("editarId").value;
-      const nombre = document.getElementById("editarNombre").value;
-      const ubicacion = document.getElementById("editarUbicacion").value;
-      const precio = parseFloat(document.getElementById("editarPrecio").value);
-      const imagenUrl = document.getElementById("editarImagenUrl").value;
-      const descripcion = document.getElementById("editarDescripcion").value;
+    const id = document.getElementById("editarId").value;
+    const nombre = document.getElementById("editarNombre").value;
+    const ubicacion = document.getElementById("editarUbicacion").value;
+    const precio = parseFloat(document.getElementById("editarPrecio").value);
+    const imagenUrl = document.getElementById("editarImagenUrl").value;
+    const descripcion = document.getElementById("editarDescripcion").value;
 
-      try {
-        const res = await fetch(`http://localhost:8080/api/hospedajes/${id}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ nombre, ubicacion, precio, imagenUrl, descripcion })
-        });
+    try {
+      const res = await fetch(`http://localhost:8080/api/hospedajes/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nombre, ubicacion, precio, imagenUrl, descripcion })
+      });
 
-        if (res.ok) {
-          alert("✅ Hospedaje actualizado correctamente.");
-          document.getElementById("modalEditar").style.display = "none";
-          cargarHospedajes();
-        } else {
-          alert("❌ Error al actualizar hospedaje.");
-        }
-      } catch (error) {
-        console.error(error);
-        alert("Error al conectar con el servidor.");
+      if (res.ok) {
+        alert("✅ Hospedaje actualizado correctamente.");
+        document.getElementById("modalEditar").style.display = "none";
+        cargarHospedajes();
+      } else {
+        alert("❌ Error al actualizar hospedaje.");
       }
-    });
+    } catch (error) {
+      console.error(error);
+      alert("Error al conectar con el servidor.");
+    }
+  });
 
-    document.getElementById("cerrarSesion").addEventListener("click", () => {
-      localStorage.clear();
-      window.location.href = "/login.html";
-    });
+  document.getElementById("cerrarSesion").addEventListener("click", () => {
+    localStorage.clear();
+    window.location.href = "/login.html";
+  });
 
-    cargarHospedajes();
-  </script>
+  cargarHospedajes();
+</script>
+
 </body>
 </html>

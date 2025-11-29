@@ -1,7 +1,9 @@
 package com.example.eco_hospedajes.controller;
 
 import com.example.eco_hospedajes.model.Hospedaje;
+import com.example.eco_hospedajes.model.Usuario;
 import com.example.eco_hospedajes.repository.HospedajeRepository;
+import com.example.eco_hospedajes.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,6 +16,14 @@ public class HospedajeController {
 
     @Autowired
     private HospedajeRepository hospedajeRepository;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    @GetMapping("/propietario/{id}")
+    public List<Hospedaje> listarHospedajesPorPropietario(@PathVariable Long id) {
+        return hospedajeRepository.findByPropietarioId(id);
+    }
 
     @GetMapping
     public List<Hospedaje> listarHospedajes() {
@@ -28,6 +38,16 @@ public class HospedajeController {
 
     @PostMapping
     public Hospedaje agregarHospedaje(@RequestBody Hospedaje hospedaje) {
+
+        if (hospedaje.getPropietario() == null || hospedaje.getPropietario().getId() == null) {
+            throw new RuntimeException("Debe asignarse un propietario al hospedaje.");
+        }
+
+        Usuario propietario = usuarioRepository.findById(hospedaje.getPropietario().getId())
+                .orElseThrow(() -> new RuntimeException("Propietario no encontrado."));
+
+        hospedaje.setPropietario(propietario);
+
         return hospedajeRepository.save(hospedaje);
     }
 

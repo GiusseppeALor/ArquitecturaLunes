@@ -50,44 +50,60 @@
     <div id="mensaje" class="mensaje"></div>
   </main>
 
-  <script>
-    document.getElementById("formHospedaje").addEventListener("submit", async (e) => {
-      e.preventDefault();
+<script>
+  document.getElementById("formHospedaje").addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-      const nombre = document.getElementById("nombre").value.trim();
-      const ubicacion = document.getElementById("ubicacion").value.trim();
-      const precio = parseFloat(document.getElementById("precio").value);
-      const imagenUrl = document.getElementById("imagenUrl").value.trim();
-      const descripcion = document.getElementById("descripcion").value.trim();
-      const mensaje = document.getElementById("mensaje");
+    const nombre = document.getElementById("nombre").value.trim();
+    const ubicacion = document.getElementById("ubicacion").value.trim();
+    const precio = parseFloat(document.getElementById("precio").value);
+    const imagenUrl = document.getElementById("imagenUrl").value.trim();
+    const descripcion = document.getElementById("descripcion").value.trim();
+    const mensaje = document.getElementById("mensaje");
 
-      try {
-        const res = await fetch("http://localhost:8080/api/hospedajes", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ nombre, ubicacion, precio, imagenUrl, descripcion })
-        });
+    const propietarioId = localStorage.getItem("usuarioId");
 
-        if (res.ok) {
-          mensaje.textContent = "✅ Hospedaje registrado correctamente";
-          mensaje.style.color = "green";
-          e.target.reset();
-        } else {
-          const errorData = await res.json();
-          mensaje.textContent = `❌ Error: ${errorData.mensaje || "No se pudo registrar el hospedaje"}`;
-          mensaje.style.color = "red";
-        }
-      } catch (error) {
-        mensaje.textContent = "❌ Error al conectar con el servidor";
+    if (!propietarioId) {
+      mensaje.textContent = "❌ No se encontró el usuario logueado.";
+      mensaje.style.color = "red";
+      return;
+    }
+
+    try {
+      const res = await fetch("http://localhost:8080/api/hospedajes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          nombre,
+          ubicacion,
+          precio,
+          imagenUrl,
+          descripcion,
+          propietario: { id: propietarioId } 
+        })
+      });
+
+      if (res.ok) {
+        mensaje.textContent = "✅ Hospedaje registrado correctamente";
+        mensaje.style.color = "green";
+        e.target.reset();
+      } else {
+        const errorData = await res.json();
+        mensaje.textContent = `❌ Error: ${errorData.mensaje || "No se pudo registrar el hospedaje"}`;
         mensaje.style.color = "red";
-        console.error(error);
       }
-    });
+    } catch (error) {
+      mensaje.textContent = "❌ Error al conectar con el servidor";
+      mensaje.style.color = "red";
+      console.error(error);
+    }
+  });
 
-    document.getElementById("cerrarSesion").addEventListener("click", () => {
-      localStorage.clear(); 
-      window.location.href = "/login.html";
-    });
-  </script>
+  document.getElementById("cerrarSesion").addEventListener("click", () => {
+    localStorage.clear();
+    window.location.href = "/login.html";
+  });
+</script>
+
 </body>
 </html>
